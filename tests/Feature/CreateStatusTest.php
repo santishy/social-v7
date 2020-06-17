@@ -21,7 +21,7 @@ class CreateStatusTest extends TestCase
       $user = factory(User::class)->create();
       $this->actingAs($user);
       $response = $this->postJson(route('statuses.store'),['body' => 'Mi primer estado']);
-      $response->assertJson(['body' => 'Mi primer estado']);
+      $response->assertJson(['data' => ['body' => 'Mi primer estado']]);
       $this->assertDatabaseHas('statuses',[
                                             'body' => 'Mi primer estado',
                                             'user_id' => $user->id
