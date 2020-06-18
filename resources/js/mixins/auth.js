@@ -1,9 +1,16 @@
 let user = document.head.querySelector('meta[name="user"]');
 
-module.export = {
+export default{
   computed:{
-    user(){
+    currentUser(){
       return JSON.parse(user.content);
+    },
+    isAuthenticated(){
+      return !!user.content
+    },
+    guest(){
+      return !user.content
     }
-  }
-};
+  },
+
+}

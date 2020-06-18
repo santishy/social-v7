@@ -13,17 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//routes Statuses
 Route::post('statuses','StatusesController@store')->name('statuses.store')->middleware('auth');
 Route::get('statuses','StatusesController@index')->name('statuses.index');
+
+//routes likes
+Route::post('statuses/{status}/likes','StatusLikesController@store')->name('statuses.likes.store');
+
 Route::auth();
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
