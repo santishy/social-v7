@@ -12,5 +12,10 @@ export default{
       return !user.content
     }
   },
-
+  methods:{
+    redirectIfGuest(){
+      if(this.guest)
+        return window.location.href='/login';
+    }
+  }
 }

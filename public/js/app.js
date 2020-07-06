@@ -1927,6 +1927,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1981,6 +1984,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1993,11 +2016,27 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/statuses').then(function (res) {
       _this.statuses = res.data.data;
     })["catch"](function (err) {
-      console.log(err.response.data);
+      console.log(err.response);
     });
     EventBus.$on('status-created', function (status) {
       _this.statuses.unshift(status);
     });
+  },
+  methods: {
+    like: function like(status) {
+      axios.post('/statuses/' + status.id + '/likes').then(function (res) {
+        status.is_liked = true;
+      })["catch"](function (err) {
+        if (err.response.status == 401) window.location.href = '/login';
+      });
+    },
+    unlike: function unlike(status) {
+      axios["delete"]('/statuses/' + status.id + '/likes').then(function (res) {
+        status.is_liked = false;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
   }
 });
 
@@ -37598,7 +37637,10 @@ var staticRenderFns = [
           staticClass: "btn btn-primary",
           attrs: { id: "create-status", name: "button" }
         },
-        [_vm._v("Publicar")]
+        [
+          _c("i", { staticClass: "fa fa-paper-plane mr-1" }),
+          _vm._v("\n        Publicar\n      ")
+        ]
       )
     ])
   }
@@ -37626,6 +37668,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { on: { click: _vm.redirectIfGuest } },
     _vm._l(_vm.statuses, function(status) {
       return _c("div", { staticClass: "card border-0 mb-3 shadow-sm" }, [
         _c("div", { staticClass: "card-body d-flex flex-column" }, [
@@ -37653,6 +37696,51 @@ var render = function() {
             staticClass: "card-text text-secondary",
             domProps: { textContent: _vm._s(status.body) }
           })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-footer p-2" }, [
+          status.is_liked
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-link btn-sm",
+                  attrs: { dusk: "unlike-btn" },
+                  on: {
+                    click: function($event) {
+                      return _vm.unlike(status)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fa fa-thumbs-up" }),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v("Te gusta")]),
+                  _vm._v(" "),
+                  _c("div", { attrs: { dusk: "likes-count" } }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(status.likesCount) +
+                        "\n              "
+                    )
+                  ])
+                ]
+              )
+            : _c(
+                "button",
+                {
+                  staticClass: "btn btn-link btn-sm",
+                  attrs: { dusk: "like-btn" },
+                  on: {
+                    click: function($event) {
+                      return _vm.like(status)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "far fa-thumbs-up" }),
+                  _vm._v("\n              Me gusta\n            ")
+                ]
+              )
         ])
       ])
     }),
@@ -50076,6 +50164,11 @@ var user = document.head.querySelector('meta[name="user"]');
     },
     guest: function guest() {
       return !user.content;
+    }
+  },
+  methods: {
+    redirectIfGuest: function redirectIfGuest() {
+      if (this.guest) return window.location.href = '/login';
     }
   }
 });

@@ -15,7 +15,7 @@ class CanLikeStatusesTest extends TestCase
 
   /** @test */
   public function an_authenticated_user_can_like_statuses(){
-    $this->withoutExceptionHandling();
+    //$this->withoutExceptionHandling();
     $user = factory(User::class)->create();
     $status = factory(Status::class)->create();
     $this->actingAs($user)->postJson(route('statuses.likes.store',$status));
@@ -23,5 +23,25 @@ class CanLikeStatusesTest extends TestCase
       'user_id' => $user->id,
       'status_id' => $status->id
     ]);
+  }
+
+  /** @test */
+
+  public function guests_can_not_like_statuses(){
+    $status = factory(Status::class)->create();
+    $response = $this->post(route('statuses.likes.store',$status));
+    //$response->assertStatus(401);
+    $response->assertRedirect('login');
+  }
+
+  /** @test */
+
+  public function an_authenticated_user_can_unliked_statuses(){
+    $this->withoutExceptionHandling();
+    $status = factory(Status::class)->create();
+    $user = factory(User::class)->create();
+    $this->actingAs($user)->postJson(route('statuses.likes.store',$status)); //aqui no usamos el status->like() por que estamos viendo desde la perspectiva del usuario
+    $this->actingAs($user)->deleteJson(route('statuses.likes.destroy',$status));
+    $this->assertDatabaseMissing('likes',$status->toArray());
   }
 }

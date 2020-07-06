@@ -28,4 +28,5 @@ class UsersCanCreateStatusesTest extends DuskTestCase
                     ->screenShot('prueba');
         });
     }
+  
 }

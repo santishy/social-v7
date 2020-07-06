@@ -20,6 +20,9 @@ class StatusResource extends JsonResource
           'body' => $this->body,
           'user_avatar' => 'https://aprendible.com/images/default-avatar.jpg',
           'ago' => $this->created_at->diffForHumans(),
+          'id' => $this->id,
+          'is_liked' => $this->isLiked(),
+          'likesCount' => $this->likesCount()
         ];
     }
 }

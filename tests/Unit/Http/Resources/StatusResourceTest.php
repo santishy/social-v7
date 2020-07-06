@@ -37,6 +37,14 @@ class StatusResourceTest extends TestCase
           $status->created_at->diffForHumans(),
           $statusResource['ago']
         );
+        $this->assertEquals(
+          false,
+          $statusResource['is_liked']
+        );
+        $this->assertEquals(
+          0,
+          $statusResource['likes_count']
+        );
         $this->assertArrayHasKey('body',$statusResource);
         $this->assertArrayHasKey('user_name',$statusResource);
         $this->assertArrayHasKey('user_avatar',$statusResource);
