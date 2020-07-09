@@ -18,10 +18,12 @@ class UsersCanLikeStatusesTest extends DuskTestCase
     {
         $user = factory(User::class)->create();
         $status = factory(Status::class)->create();
+
         $this->browse(function (Browser $browser) use ($user,$status) {
             $browser->loginAs($user)
                     ->visit('/')
                     ->waitForText($status->body)
+                    ->assertSee($status->body)
                     ->assertSeeIn('@likes-count',0)
                     ->press('@like-btn')
                     ->waitForText('Te gusta')
@@ -29,7 +31,8 @@ class UsersCanLikeStatusesTest extends DuskTestCase
                     ->assertSeeIn('@likes-count',1)
                     ->press('@unlike-btn')
                     ->waitForText('Me gusta')
-                    ->assertSee('Me gusta');
+                    ->assertSee('Me gusta')
+                      ->assertSeeIn('@likes-count',0);
         });
     }
     /** @test */

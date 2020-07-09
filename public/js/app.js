@@ -2004,6 +2004,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2026,6 +2032,7 @@ __webpack_require__.r(__webpack_exports__);
     like: function like(status) {
       axios.post('/statuses/' + status.id + '/likes').then(function (res) {
         status.is_liked = true;
+        status.likes_count++;
       })["catch"](function (err) {
         if (err.response.status == 401) window.location.href = '/login';
       });
@@ -2033,6 +2040,7 @@ __webpack_require__.r(__webpack_exports__);
     unlike: function unlike(status) {
       axios["delete"]('/statuses/' + status.id + '/likes').then(function (res) {
         status.is_liked = false;
+        status.likes_count--;
       })["catch"](function (err) {
         console.log(err);
       });
@@ -37698,50 +37706,61 @@ var render = function() {
           })
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "card-footer p-2" }, [
-          status.is_liked
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-link btn-sm",
-                  attrs: { dusk: "unlike-btn" },
-                  on: {
-                    click: function($event) {
-                      return _vm.unlike(status)
+        _c(
+          "div",
+          {
+            staticClass:
+              "card-footer p-2 d-flex justify-content-between align-items-center"
+          },
+          [
+            status.is_liked
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-link btn-sm",
+                    attrs: { dusk: "unlike-btn" },
+                    on: {
+                      click: function($event) {
+                        return _vm.unlike(status)
+                      }
                     }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fa fa-thumbs-up" }),
-                  _vm._v(" "),
-                  _c("strong", [_vm._v("Te gusta")]),
-                  _vm._v(" "),
-                  _c("div", { attrs: { dusk: "likes-count" } }, [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(status.likesCount) +
-                        "\n              "
-                    )
-                  ])
-                ]
-              )
-            : _c(
-                "button",
-                {
-                  staticClass: "btn btn-link btn-sm",
-                  attrs: { dusk: "like-btn" },
-                  on: {
-                    click: function($event) {
-                      return _vm.like(status)
+                  },
+                  [
+                    _c("i", { staticClass: "fa fa-thumbs-up" }),
+                    _vm._v(" "),
+                    _c("strong", [_vm._v("Te gusta")])
+                  ]
+                )
+              : _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-link btn-sm",
+                    attrs: { dusk: "like-btn" },
+                    on: {
+                      click: function($event) {
+                        return _vm.like(status)
+                      }
                     }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "far fa-thumbs-up" }),
-                  _vm._v("\n              Me gusta\n            ")
-                ]
-              )
-        ])
+                  },
+                  [
+                    _c("i", { staticClass: "far fa-thumbs-up" }),
+                    _vm._v("\n              Me gusta\n\n            ")
+                  ]
+                ),
+            _vm._v(" "),
+            _c("div", { staticClass: "mr-2 text-secondary" }, [
+              _c("i", { staticClass: "far fa-thumbs-up" }),
+              _vm._v(" "),
+              _c("span", { attrs: { dusk: "likes-count" } }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(status.likes_count) +
+                    "\n              "
+                )
+              ])
+            ])
+          ]
+        )
       ])
     }),
     0

@@ -21,6 +21,9 @@ Route::get('statuses','StatusesController@index')->name('statuses.index');
 Route::post('statuses/{status}/likes','StatusLikesController@store')->name('statuses.likes.store')->middleware('auth');
 Route::delete('statuses/{status}/likes','StatusLikesController@destroy')->name('statuses.likes.destroy')->middleware('auth');
 
+//comentarios
+Route::post('statuses/{status}/comments','StatusCommentsController@store')->name('statuses.comments.store')->middleware('auth');
+
 Route::auth();
 
 Route::get('/', function () {

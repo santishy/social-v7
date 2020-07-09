@@ -15,16 +15,14 @@
         <p class="card-text text-secondary" v-text="status.body"></p>
 
       </div>
-      <div class="card-footer p-2">
+      <div class="card-footer p-2 d-flex justify-content-between align-items-center">
         <button v-if="status.is_liked"
                 @click="unlike(status)"
                 dusk="unlike-btn"
                 class="btn btn-link btn-sm">
                 <i class="fa fa-thumbs-up"></i>
                 <strong>Te gusta</strong>
-                <div dusk="likes-count">
-                  {{status.likesCount}}
-                </div>
+
               </button>
         <button v-else
                 @click="like(status)"
@@ -32,7 +30,15 @@
                 class="btn btn-link btn-sm">
                 <i class="far fa-thumbs-up"></i>
                 Me gusta
+
               </button>
+              <div class="mr-2 text-secondary">
+                <i class="far fa-thumbs-up"></i>
+                <span dusk="likes-count">
+                  {{status.likes_count}}
+                </span>
+              </div>
+
       </div>
     </div>
   </div>
@@ -64,6 +70,7 @@
         axios.post('/statuses/'+status.id+'/likes')
               .then((res) => {
                 status.is_liked=true;
+                status.likes_count++;
               })
               .catch((err) => {
                 if(err.response.status == 401)
@@ -74,6 +81,7 @@
         axios.delete('/statuses/'+status.id+'/likes')
               .then((res) => {
                 status.is_liked=false;
+                status.likes_count--;
               })
               .catch((err) => {
                 console.log(err)
