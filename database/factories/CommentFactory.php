@@ -4,7 +4,7 @@
 
 use App\Models\Comment;
 use Faker\Generator as Faker;
-use App\Models\User;
+use App\User;
 use App\Models\Status;
 
 $factory->define(Comment::class, function (Faker $faker) {

@@ -6,10 +6,11 @@ namespace Tests\Unit\Http\Resources;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Comment;
-use App\Htpp\Resources\CommentResource;
+use App\Http\Resources\CommentResource;
 
 class CommentResourceTest extends TestCase
 {
+    use RefreshDatabase;
     /**
     *@test
     */
