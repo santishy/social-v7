@@ -7,6 +7,7 @@ use App\Models\Status;
 use Tests\TestCase;
 use App\User;
 use App\Models\Like;
+use App\Models\Comment;
 
 class StatusTest extends TestCase
 {
@@ -23,7 +24,12 @@ class StatusTest extends TestCase
       $like = factory(Like::class)->create(['status_id' => $status->id]);
       $this->assertInstanceOf(Like::class,$status->likes()->first());
     }
-
+    /** @test */
+    public function a_status_has_many_comments(){
+      $status = factory(Status::class)->create();
+      $comments = factory(Comment::class)->create(['status_id' => $status->id]);
+      $this->assertInstanceOf(Comment::class,$status->comments()->first());
+    }
     /** @test */
     public function a_status_can_be_liked_and_unlike(){
       $status = factory(Status::class)->create();

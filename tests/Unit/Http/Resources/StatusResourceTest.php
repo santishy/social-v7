@@ -6,6 +6,8 @@ namespace Tests\Unit\Http\Resources;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Http\Resources\StatusResource;
+use App\Http\Resources\CommentResource;
+use App\Models\Comment;
 use App\Models\Status;
 
 class StatusResourceTest extends TestCase
@@ -20,6 +22,7 @@ class StatusResourceTest extends TestCase
     {
         //$this->withoutExceptionHandling();
         $status = factory(Status::class)->create();
+        $comment = factory(Comment::class)->create(['status_id' => $status->id]);
         $statusResource = StatusResource::make($status)->resolve();
         $this->assertEquals(
           $status->body,
@@ -44,6 +47,16 @@ class StatusResourceTest extends TestCase
         $this->assertEquals(
           0,
           $statusResource['likes_count']
+        );
+
+        //dd($statusResource['comments']->collection->first()->resource);
+        $this->assertEquals(
+          CommentResource::class,
+          $statusResource['comments']->collects
+        );
+        $this->assertInstanceOf(
+          Comment::class,
+          $statusResource['comments']->first()->resource
         );
         $this->assertArrayHasKey('body',$statusResource);
         $this->assertArrayHasKey('user_name',$statusResource);

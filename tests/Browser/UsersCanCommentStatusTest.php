@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\Models\Status;
+use App\Models\Comment;
 use App\User;
 
 class UsersCanCommentStatusTest extends DuskTestCase
@@ -26,6 +27,21 @@ class UsersCanCommentStatusTest extends DuskTestCase
                 ->type('comment','Mi primer comentario')
                 ->press('@comment-btn')
                 ->waitForText('Mi primer comentario');
+    });
+  }
+  /**
+  *@test
+  */
+  public function users_can_see_comments(){
+    $status = factory(Status::class)->create();
+    $comments = factory(Comment::class,2)->create(['status_id' => $status->id]);
+    $this->browse(function (Browser $browser) use ($status,$comments) {
+      $browser->visit('/')
+              ->waitForText($status->body);
+      foreach($comments as $comment){
+        $browser->assertSee($comment->body)
+                ->assertSee($comment->user->name);
+      }
     });
   }
 }

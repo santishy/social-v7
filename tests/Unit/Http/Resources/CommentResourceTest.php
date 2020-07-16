@@ -17,10 +17,19 @@ class CommentResourceTest extends TestCase
     public function a_comment_resources_have_must_the_necessary_fields(){
       $this->withoutExceptionHandling();
       $comment = factory(Comment::class)->create();
-      $commentResource = CommentResource::make($comment);
+      $commentResource = CommentResource::make($comment)->resolve();
       $this->assertEquals(
         $comment->body,
         $commentResource['body']
+      );
+
+      $this->assertEquals(
+        $comment->user->name,
+        $commentResource['user_name']
+      );
+      $this->assertEquals(
+        'https://aprendible.com/images/default-avatar.jpg',
+        $commentResource['user_avatar']
       );
     }
 }
