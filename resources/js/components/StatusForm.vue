@@ -2,7 +2,13 @@
   <div>
     <form v-if="isAuthenticated"  @submit="submit">
       <div  class="card-body bg-light">
-          <textarea class="form-control border-0  bg-light" v-model="body" :placeholder="`¿Que estas pensando ${currentUser.name}?`"name="body"></textarea>
+          <textarea v-model="body"
+                    class="form-control border-0  bg-light"
+                    :placeholder="`¿Que estas pensando ${currentUser.name}?`"
+                    name="body"
+                    required
+          >
+          </textarea>
       </div>
       <div class="card-footer">
         <button id="create-status" class="btn btn-primary" name="button">

@@ -10,9 +10,12 @@ use App\Http\Resources\CommentResource;
 class StatusCommentsController extends Controller
 {
     public function store(Status $status,Request $request){
+      request()->validate([
+        'body' => 'required'
+      ]);
       $comment = Comment::create(['body' => $request->body,
-                              'user_id' => auth()->id(),
-                              'status_id' => $status->id]);
+                                  'user_id' => auth()->id(),
+                                  'status_id' => $status->id]);
       return CommentResource::make($comment);
     }
 }
