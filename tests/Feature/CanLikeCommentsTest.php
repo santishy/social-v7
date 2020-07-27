@@ -24,7 +24,7 @@ class CanLikeCommentsTest extends TestCase
      }
      /** @test */
      public function an_authenticated_user_can_like_and_unlike_comments(){
-       $this->withoutExceptionHandling();
+      // $this->withoutExceptionHandling();
        $user = factory(User::class)->create();
        $comment = factory(Comment::class)->create();
        $this->assertCount(0,$comment->likes);

@@ -31,4 +31,14 @@ class CommentTest extends TestCase
       ]);
       $this->assertInstanceOf(Like::class,$comment->likes()->first());
     }
+    /** @test */
+    public function a_status_can_be_liked_and_unlike(){
+      $status = factory(Status::class)->create();
+      $this->actingAs(factory(User::class)->create());
+      $this->assertInstanceOf(Like::class,$status->like());
+      $this->assertEquals(1,$status->likes->count());
+      $status->unliked();
+      $this->assertEquals(0,$status->fresh()->likes->count());
+
+    }
 }
