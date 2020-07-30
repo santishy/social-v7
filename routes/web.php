@@ -29,7 +29,9 @@ Route::post('comments/{comment}/likes','CommentLikesController@store')->name('co
 Route::delete('comments/{comment}/likes','CommentLikesController@destroy')->name('comments.likes.destroy')->middleware('auth');
 Route::auth();
 
+use App\Models\Status;
 Route::get('/', function () {
+  dd( Status::find(1)->likes());
     return view('welcome');
 });
 
