@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Status;
 use Tests\TestCase;
 use App\User;
+use App\Traits\HasLikes;
 use App\Models\Like;
 use App\Models\Comment;
 
@@ -21,5 +22,13 @@ class CommentTest extends TestCase
       $this->assertInstanceOf(User::class,$comment->user);
     }
 
+    /**
+    *@test
+    */
+
+    public function a_comment_model_must_use_the_trait_has_likes(){
+      $this->assertClassUsesTrait(HasLikes::class,Comment::class);
+
+    }
 
 }
