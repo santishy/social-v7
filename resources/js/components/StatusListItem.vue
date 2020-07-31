@@ -30,6 +30,7 @@
         <div class="card mb-2 border-0 shadow-sm ">
           <div class="card-body  p-2  text-secondary">
             <a href="#"><strong>{{ comment.user_name }}</strong></a> {{ comment.body }}
+            <span dusk="comment-likes-count"></span>
           </div>
         </div>
       </div>

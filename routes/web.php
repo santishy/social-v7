@@ -31,7 +31,6 @@ Route::auth();
 
 use App\Models\Status;
 Route::get('/', function () {
-  dd( Status::find(1)->likes());
     return view('welcome');
 });
 
