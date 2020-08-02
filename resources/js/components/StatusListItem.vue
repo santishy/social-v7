@@ -16,7 +16,12 @@
       <p class="card-text text-secondary" v-text="status.body"></p>
     </div>
     <div class="card-footer p-2 d-flex justify-content-between align-items-center">
-      <like-btn :status="status" :key="status.id"> </like-btn>
+      <like-btn :model="status"
+                :key="status.id"
+                :url="`/statuses/${status.id}/likes`"
+                selector="like-btn"
+      >
+      </like-btn>
       <div class="mr-2 text-secondary">
         <i class="far fa-thumbs-up"></i>
         <span dusk="likes-count">
@@ -30,7 +35,12 @@
         <div class="card mb-2 border-0 shadow-sm ">
           <div class="card-body  p-2  text-secondary">
             <a href="#"><strong>{{ comment.user_name }}</strong></a> {{ comment.body }}
-            <span dusk="comment-likes-count"></span>
+            <like-btn :url='`/comments/${comment.id}/likes`'
+                      :model="comment"
+                      selector="comment-like-btn"
+            >
+            </like-btn>
+          <span dusk="comment-likes-count">{{comment.likes_count}}</span>
           </div>
         </div>
       </div>
@@ -54,10 +64,7 @@
                 <button dusk="comment-btn" class="btn btn-primary">Enviar</button>
             </div>
           </div>
-
-
         </div>
-
       </form>
     </div>
   </div>
@@ -96,6 +103,26 @@ export default {
           console.log(error.response.data);
         });
     },
+    like(comment){
+      axios.post(`/comments/${comment.id}/likes`)
+           .then((res) => {
+             comment.likes_count++;
+             comment.is_liked = true;
+           })
+           .catch(error => {
+             console.log(error.response.data);
+           });
+   },
+   unlike(comment){
+     axios.delete(`/comments/${comment.id}/likes`)
+          .then((res) => {
+            comment.likes_count--;
+            comment.is_liked = false;
+          })
+          .catch(error => {
+            console.log(error.response.data);
+          });
   },
-};
+  }
+}
 </script>

@@ -21,14 +21,14 @@ class UsersCanLikeCommentsTest extends DuskTestCase
       $this->browse(function (Browser $browser) use ($user,$comment) {
           $browser->loginAs($user)
                   ->visit('/')
-                  ->waitForText($comment->body)
+                  ->waitForText($comment->body,5)
                   ->assertSee($comment->body)
                   ->assertSeeIn('@comment-likes-count',0)
-                  ->press('@comment-like-btn')
+                  ->press('@comment-like-btn',5)
                   ->waitForText('Te gusta')
                   ->assertSee('Te gusta')
                   ->assertSeeIn('@comment-likes-count',1)
-                  ->press('@comment-unlike-btn')
+                  ->press('@comment-like-btn',5)
                   ->waitForText('Me gusta')
                   ->assertSee('Me gusta')
                   ->assertSeeIn('@comment-likes-count',0);

@@ -1,55 +1,64 @@
 <template>
     <button
-        v-if="status.is_liked"
-        @click="unlike(status)"
-        dusk="unlike-btn"
-        class="btn btn-link btn-sm"
+        @click="toggle()"
+        :dusk="selector"
+        :class="getBtnClass"
     >
-        <i class="fa fa-thumbs-up"></i>
-        <strong>Te gusta</strong>
-    </button>
-    <button
-        v-else
-        @click="like(status)"
-        dusk="like-btn"
-        class="btn btn-link btn-sm"
-    >
-        <i class="far fa-thumbs-up"></i>
-        Me gusta
+        <i :class="getIconClass"></i>
+        {{getText}}
     </button>
 </template>
 
 <script>
 export default {
     props: {
-        status: {
+        model: {
             type: Object
+        },
+        url:{
+          type: String,
+          required: true
+        },
+        selector:{
+          type:String
         }
     },
     methods: {
-        like(status) {
-            axios
-                .post("/statuses/" + status.id + "/likes")
-                .then(res => {
-                    status.is_liked = true;
-                    status.likes_count++;
-                })
-                .catch(err => {
-                    if (err.response.status == 401)
-                        window.location.href = "/login";
-                });
-        },
-        unlike(status) {
-            axios
-                .delete("/statuses/" + status.id + "/likes")
-                .then(res => {
-                    status.is_liked = false;
-                    status.likes_count--;
-                })
-                .catch(err => {
-                    console.log(err);
-                });
+        toggle(){
+          let $method = this.model.is_liked ? 'delete' : 'post';
+          axios[$method](this.url)
+              .then(res => {
+                  this.model.is_liked = !this.model.is_liked;
+                  if(this.model.is_liked)
+                    this.model.likes_count++;
+                  else
+                    this.model.likes_count--;
+              })
+              .catch(err => {
+                  if (err.response.status == 401)
+                      window.location.href = "/login";
+              });
         }
+    },
+    computed:{
+      getText(){
+        return this.model.is_liked ? 'Te gusta' : 'Me gusta';
+      },
+      getBtnClass(){
+        return  [
+          this.model.is_liked ? 'font-weight-bold' : '',
+          'btn',
+          'btn-link',
+          'btn-sm'
+        ];
+      },
+      getIconClass(){
+        return [this.model.is_liked ? 'fa' : 'far',
+                'fa-thumbs-up',
+                'text-primary',
+                'mr-1'
+               ]
+      }
     }
 };
 </script>

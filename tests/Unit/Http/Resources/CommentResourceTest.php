@@ -31,5 +31,17 @@ class CommentResourceTest extends TestCase
         'https://aprendible.com/images/default-avatar.jpg',
         $commentResource['user_avatar']
       );
+      $this->assertEquals(
+        false,
+        $commentResource['is_liked']
+      );
+      $this->assertEquals(
+        $comment->id,
+        $commentResource['id']
+      );
+      $this->assertEquals(
+        0,
+        $commentResource['likes_count']
+      );
     }
 }

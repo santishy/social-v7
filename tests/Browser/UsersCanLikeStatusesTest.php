@@ -41,7 +41,7 @@ class UsersCanLikeStatusesTest extends DuskTestCase
                     ->waitForText('Te gusta')
                     ->assertSee('Te gusta')
                     ->assertSeeIn('@likes-count',1)
-                    ->press('@unlike-btn')
+                    ->press('@like-btn')
                     ->waitForText('Me gusta')
                     ->assertSee('Me gusta')
                       ->assertSeeIn('@likes-count',0);
