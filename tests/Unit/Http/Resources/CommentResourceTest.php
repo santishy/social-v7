@@ -28,12 +28,16 @@ class CommentResourceTest extends TestCase
         $commentResource['user_name']
       );
       $this->assertEquals(
-        'https://aprendible.com/images/default-avatar.jpg',
+        $comment->user->avatar(),
         $commentResource['user_avatar']
       );
       $this->assertEquals(
         false,
         $commentResource['is_liked']
+      );
+      $this->assertEquals(
+        $comment->user->link(),
+        $commentResource['user_link']
       );
       $this->assertEquals(
         $comment->id,

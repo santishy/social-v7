@@ -33,7 +33,7 @@ class StatusTest extends TestCase
 
     public function a_status_model_must_use_the_trait_has_likes(){
       $this->assertClassUsesTrait(HasLikes::class,Comment::class);
-
     }
+    
 
 }

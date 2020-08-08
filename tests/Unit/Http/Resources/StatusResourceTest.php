@@ -33,7 +33,7 @@ class StatusResourceTest extends TestCase
           $statusResource['user_name']
         );
         $this->assertEquals(
-          'https://aprendible.com/images/default-avatar.jpg',
+          $status->user->avatar(),
           $statusResource['user_avatar']
         );
         $this->assertEquals(
@@ -48,7 +48,10 @@ class StatusResourceTest extends TestCase
           0,
           $statusResource['likes_count']
         );
-
+        $this->assertEquals(
+          $status->user->link(),
+          $statusResource['user_link']
+        );
         //dd($statusResource['comments']->collection->first()->resource);
         $this->assertEquals(
           CommentResource::class,

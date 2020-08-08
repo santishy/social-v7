@@ -18,11 +18,12 @@ class StatusResource extends JsonResource
         return [
           'user_name' => $this->user->name,
           'body' => $this->body,
-          'user_avatar' => 'https://aprendible.com/images/default-avatar.jpg',
+          'user_avatar' => $this->user->avatar(),
           'ago' => $this->created_at->diffForHumans(),
           'id' => $this->id,
           'is_liked' => $this->isLiked(),
           'likes_count' => $this->likesCount(),
+          'user_link' => $this->user->link(),
           'comments' => CommentResource::collection($this->comments),
         ];
     }

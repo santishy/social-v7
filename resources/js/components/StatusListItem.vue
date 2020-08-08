@@ -5,9 +5,9 @@
       <div class="d-flex align-items-center mb-3">
         <img class="rounded mr-3 shadow-sm"
              width="40px"
-             src="https://aprendible.com/images/default-avatar.jpg" />
+             :src="status.user_avatar" />
         <div class="">
-          <h5 class="mb-1">{{ status.user_name }}</h5>
+          <h5 class="mb-1"><a :href="status.user_link" v-text="status.user_name"></a></h5>
           <div class="small text-muted">
             {{ status.ago }}
           </div>
@@ -31,16 +31,26 @@
     </div>
     <div class="card-footer">
       <div v-for="comment in comments">
-        <img class="rounded float-left shadow-sm mr-3" width="34px" :src="comment.user_avatar" :alt="comment.user_name">
-        <div class="card mb-2 border-0 shadow-sm ">
-          <div class="card-body  p-2  text-secondary">
-            <a href="#"><strong>{{ comment.user_name }}</strong></a> {{ comment.body }}
+        <div class="d-flex">
+          <img class="rounded shadow-sm mr-3" height="34px" width="34px" :src="comment.user_avatar" :alt="comment.user_name">
+          <div class="flex-grow-1">
+            <div class="card border-0 shadow-sm ">
+              <div class="card-body  p-2  text-secondary">
+                <a :href="comment.user_link"><strong>{{ comment.user_name }}</strong></a> {{ comment.body }}
+              </div>
+            </div>
+            <small dusk="comment-likes-count"
+                   class="float-right badge badge-primary badge-pill mt-1"
+            >
+              <i class="fa fa-thumbs-up"></i>
+              {{comment.likes_count}}
+            </small>
             <like-btn :url='`/comments/${comment.id}/likes`'
                       :model="comment"
                       selector="comment-like-btn"
+                      class="comments-like-btn"
             >
             </like-btn>
-          <span dusk="comment-likes-count">{{comment.likes_count}}</span>
           </div>
         </div>
       </div>
@@ -48,9 +58,10 @@
         <div class="d-flex align-items-center">
           <img class="rounded float-left shadow-sm mr-3"
                width="34px"
-               src="https://aprendible.com/images/default-avatar.jpg"
+               :src="currentUser.avatar"
                :alt="currentUser.name"
           />
+          <h1> hola mundo {{currentUser.avatar}} </h1>
           <div class="input-group">
             <textarea v-model="newComment"
                       class="form-control border-0 shadow-sm"
@@ -103,26 +114,16 @@ export default {
           console.log(error.response.data);
         });
     },
-    like(comment){
-      axios.post(`/comments/${comment.id}/likes`)
-           .then((res) => {
-             comment.likes_count++;
-             comment.is_liked = true;
-           })
-           .catch(error => {
-             console.log(error.response.data);
-           });
-   },
-   unlike(comment){
-     axios.delete(`/comments/${comment.id}/likes`)
-          .then((res) => {
-            comment.likes_count--;
-            comment.is_liked = false;
-          })
-          .catch(error => {
-            console.log(error.response.data);
-          });
-  },
   }
 }
 </script>
+<style lang="scss" >
+  .comments-like-btn{
+    i {
+        display: none;
+        font-size: 0.6em;
+
+      }
+    padding-left: 0px;
+  }
+</style>

@@ -21,7 +21,8 @@ class CommentResource extends JsonResource
           'id' => $this->id,
           'is_liked' => $this->isLiked(),
           'user_name' => $this->user->name,
-          'user_avatar' => 'https://aprendible.com/images/default-avatar.jpg',
+          'user_link' => $this->user->link(),
+          'user_avatar' => $this->user->avatar(),
         ];
     }
 }
