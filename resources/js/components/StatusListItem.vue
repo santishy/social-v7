@@ -8,7 +8,7 @@
              :alt="status.user.name"
              :src="status.user.avatar" />
         <div class="">
-          <h5 class="mb-1"><a :href="status.user.link" v-text="status.user_name"></a></h5>
+          <h5 class="mb-1"><a :href="status.user.link" v-text="status.user.name"></a></h5>
           <div class="small text-muted">
             {{ status.ago }}
           </div>

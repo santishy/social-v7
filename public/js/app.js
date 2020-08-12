@@ -38608,7 +38608,7 @@ var render = function() {
           _c("h5", { staticClass: "mb-1" }, [
             _c("a", {
               attrs: { href: _vm.status.user.link },
-              domProps: { textContent: _vm._s(_vm.status.user_name) }
+              domProps: { textContent: _vm._s(_vm.status.user.name) }
             })
           ]),
           _vm._v(" "),
