@@ -6,6 +6,8 @@ namespace Tests\Unit\Http\Resources;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Comment;
+use App\Http\Resources\UserResource;
+use App\User;
 use App\Http\Resources\CommentResource;
 
 class CommentResourceTest extends TestCase
@@ -23,22 +25,12 @@ class CommentResourceTest extends TestCase
         $commentResource['body']
       );
 
-      $this->assertEquals(
-        $comment->user->name,
-        $commentResource['user_name']
-      );
-      $this->assertEquals(
-        $comment->user->avatar(),
-        $commentResource['user_avatar']
-      );
+
       $this->assertEquals(
         false,
         $commentResource['is_liked']
       );
-      $this->assertEquals(
-        $comment->user->link(),
-        $commentResource['user_link']
-      );
+    
       $this->assertEquals(
         $comment->id,
         $commentResource['id']
@@ -46,6 +38,14 @@ class CommentResourceTest extends TestCase
       $this->assertEquals(
         0,
         $commentResource['likes_count']
+      );
+      $this->assertInstanceOf(
+        UserResource::class,
+        $commentResource['user']  //AQUI NO DEVUELVE UNA CADENA COMO CON EL METODO ->collects , devuelve una instancia del UserResource
+      );
+      $this->assertInstanceOf(
+        User::class,
+        $commentResource['user']->resource //aqui dentro de la instancia UserResource con el objeto ->resource (o llave) devuelve la instancia User::class
       );
     }
 }
