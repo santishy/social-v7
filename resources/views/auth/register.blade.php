@@ -3,8 +3,15 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6 mx-auto">
-        <div class="card border-0 px-4 py-2">
+        @if($errors->any())
+          <div dusk="validation-errors">
+            @foreach($errors as $error)
+              {{ $error }}
 
+            @endforeach
+          </div>
+        @endif
+        <div class="card border-0 px-4 py-2">
           <div class="card-body">
             <form  action="{{route('register')}}" method="post">
               @csrf
