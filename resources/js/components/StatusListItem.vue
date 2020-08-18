@@ -62,7 +62,7 @@
                :src="currentUser.avatar"
                :alt="currentUser.name"
           />
-          <h1> hola mundo {{currentUser.avatar}} </h1>
+        
           <div class="input-group">
             <textarea v-model="newComment"
                       class="form-control border-0 shadow-sm"
