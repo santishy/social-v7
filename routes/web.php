@@ -32,6 +32,10 @@ Route::delete('comments/{comment}/likes','CommentLikesController@destroy')->name
 //profiles
 Route::get('/@{user}','UsersController@show')->name('users.show');
 
+//userStatuses
+
+Route::get('/users/{user}/statuses','UsersStatusesController@index')->name('users.statuses.index');
+
 use App\Models\Status;
 Route::get('/', function () {
     return view('welcome');

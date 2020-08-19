@@ -2050,13 +2050,16 @@ __webpack_require__.r(__webpack_exports__);
       statuses: []
     };
   },
+  props: {
+    url: String
+  },
   components: {
     'status-list-item': _StatusListItem_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   created: function created() {
     var _this = this;
 
-    axios.get('/statuses').then(function (res) {
+    axios.get(this.getUrl).then(function (res) {
       _this.statuses = res.data.data;
     })["catch"](function (err) {
       console.log(err.response);
@@ -2064,6 +2067,11 @@ __webpack_require__.r(__webpack_exports__);
     EventBus.$on('status-created', function (status) {
       _this.statuses.unshift(status);
     });
+  },
+  computed: {
+    getUrl: function getUrl() {
+      return this.url ? this.url : '/statuses';
+    }
   }
 });
 

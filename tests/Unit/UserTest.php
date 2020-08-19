@@ -4,6 +4,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
+use App\Models\Status;
 
 class UserTest extends TestCase
 {
@@ -40,6 +41,18 @@ class UserTest extends TestCase
       $this->assertEquals(
         'https://aprendible.com/images/default-avatar.jpg',
         $user->avatar
+      );
+    }
+
+    /**
+    *@test
+    */
+    public function a_user_has_many_statuses(){
+      $user = factory(User::class)->create();
+      factory(Status::class,2)->create(['user_id' => $user->id]);
+      $this->assertInstanceOf(
+        Status::class,
+        $user->statuses()->first()
       );
     }
 }
