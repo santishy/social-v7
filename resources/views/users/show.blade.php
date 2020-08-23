@@ -7,6 +7,12 @@
           <img src="{{$user->avatar}}" class="card-img-top" alt="{{$user->name}}">
           <div class="card-body">
             <h5 class="card-title">{{$user->name}}</h5>
+            <friendship-btn
+                :recipient="{{$user}}"
+                friendship-status="{{$friendshipStatus}}"
+                class="btn btn-primary btn-block"
+            >
+            </friendship-btn>
           </div>
         </div>
       </div>

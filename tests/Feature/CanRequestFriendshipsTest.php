@@ -15,6 +15,16 @@ class CanRequestFriendshipsTest extends TestCase
     /**
     *@test
     */
+    public function guests_users_cannot_create_friendship_request(){
+
+      $recipient = factory(User::class)->create();
+      $response = $this->postJson(route('friendships.store',$recipient));
+      $response->assertStatus(401);
+    }
+
+    /**
+    *@test
+    */
     public function can_send_friendship_request(){
       $this->withoutExceptionHandling();
       $sender = factory(User::class)->create();
@@ -25,6 +35,18 @@ class CanRequestFriendshipsTest extends TestCase
         'sender_id' => $sender->id,
         'status' => 'pending',
       ]);
+      $this->actingAs($sender)->postJson(route('friendships.store',$recipient));
+      $this->assertCount(1,Friendship::all());
+    }
+
+    /**
+    *@test
+    */
+    public function guests_users_cannot_delete_friendship_request(){
+
+      $recipient = factory(User::class)->create();
+      $response = $this->deleteJson(route('friendships.destroy',$recipient));
+      $response->assertStatus(401);
     }
 
     /**
@@ -48,6 +70,15 @@ class CanRequestFriendshipsTest extends TestCase
     /**
     *@test
     */
+    public function guests_users_cannot_accept_friendship_request(){
+
+      $sender = factory(User::class)->create();
+      $response = $this->postJson(route('accept-friendships.store',$sender)); //usamos otro controlador aparentemente por que es otra ruta de soliciutd de amistad y cambia el nombre del controlador y usamos post por q se crea la nueva a mistad ojo pero se modifica la tabla friendships
+      $response->assertStatus(401);
+    }
+    /**
+    *@test
+    */
     public function can_accept_friendship_request(){
       $this->withoutExceptionHandling();
       $sender = factory(User::class)->create();
@@ -66,6 +97,14 @@ class CanRequestFriendshipsTest extends TestCase
       ]);
     }
 
+    /**
+    *@test
+    */
+    public function guests_users_cannot_deny_friendship_request(){
+      $sender = factory(User::class)->create();
+      $response = $this->deleteJson(route('accept-friendships.destroy',$sender)); //usamos otro controlador aparentemente por que es otra ruta de soliciutd de amistad y cambia el nombre del controlador y usamos post por q se crea la nueva a mistad ojo pero se modifica la tabla friendships
+      $response->assertStatus(401);
+    }
     /**
     *@test
     */

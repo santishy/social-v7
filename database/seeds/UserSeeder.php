@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\Models\Status;
 
 class UserSeeder extends Seeder
 {
@@ -12,6 +13,12 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class)->create(['email' => 'santi_shy@hotmail.com']);
+        User::truncate();
+        Status::truncate();
+        factory(User::class)->create([
+                                      'email' => 'santi_shy@hotmail.com',
+                                      'name' => 'SantiagoMartin'
+                                    ]);
+        factory(Status::class,10)->create();
     }
 }
