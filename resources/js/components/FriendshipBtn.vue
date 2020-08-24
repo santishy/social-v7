@@ -1,5 +1,5 @@
 <template>
-  <button dusk="request-friendship" @click="sendFriendshipRequest" v-text="getTextBtn"></button>
+  <button dusk="request-friendship" @click="toggleFriendshipStatus" v-text="getTextBtn"></button>
 </template>
 
 <script>
@@ -14,12 +14,17 @@
         required:true
       }
     },
+    data(){
+      return {
+          localFriendshipStatus:this.fiendshipStatus
+      }
+    },
     methods:{
-      sendFriendshipRequest(){
-        axios.post(`/friendships/${this.recipient.name}`)
+      toggleFriendshipStatus(){
+        let method = this.getMethod();
+        axios[method](`/friendships/${this.recipient.name}`)
              .then( res => {
-               console.log(res.data)
-               this.friendshipStatus = 'Solicitud enviada'
+                this.localFriendshipStatus = res.data
              })
              .catch( err => {
                console.log(err.response.data)
@@ -27,9 +32,14 @@
       }
     },
     computed:{
+      getMethod(){
+        if(this.localFriendshipStatus === 'pending')
+          return 'delete'
+        return 'post'
+      },
       getTextBtn(){
-        if(this.friendshipStatus == 'pending')
-          return 'Solicitud enviada';
+        if(this.localFriendshipStatus == 'pending')
+          return 'Cancelar solicitud';
         return 'Solicitar amistad'
       }
     }

@@ -21,10 +21,13 @@ class UsersCanRequestFriendshipsTest extends DuskTestCase
           $browser->loginAs($sender)
                   ->visit(route('users.show',$recipient))
                   ->press('@request-friendship')
-                  ->waitForText('Solicitud enviada')
-                  ->assertSee('Solicitud enviada')
+                  ->waitForText('Cancelar solicitud')
+                  ->assertSee('Cancelar solicitud')
                   ->visit(route('users.show',$recipient))
-                  ->assertSee('Solicitud enviada');
+                  ->assertSee('Cancelar solicitud')
+                  ->press('@request-friendship')
+                  ->waitForText('Solicitar amistad')
+                  ->assertSee('Solicitar amistad');
         });
     }
 }

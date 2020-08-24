@@ -29,7 +29,10 @@ class CanRequestFriendshipsTest extends TestCase
       $this->withoutExceptionHandling();
       $sender = factory(User::class)->create();
       $recipient = factory(User::class)->create();
-      $this->actingAs($sender)->postJson(route('friendships.store',$recipient));
+      $response = $this->actingAs($sender)->postJson(route('friendships.store',$recipient));
+      $response->assertJson([
+        'friendship_status' => 'pending'
+      ]);
       $this->assertDatabaseHas('friendships',[
         'recipient_id' => $recipient->id,
         'sender_id' => $sender->id,

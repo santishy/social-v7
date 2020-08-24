@@ -1923,21 +1923,30 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     }
   },
+  data: function data() {
+    return {
+      localFriendshipStatus: this.fiendshipStatus
+    };
+  },
   methods: {
-    sendFriendshipRequest: function sendFriendshipRequest() {
+    toggleFriendshipStatus: function toggleFriendshipStatus() {
       var _this = this;
 
-      axios.post("/friendships/".concat(this.recipient.name)).then(function (res) {
-        console.log(res.data);
-        _this.friendshipStatus = 'Solicitud enviada';
+      var method = this.getMethod();
+      axios[method]("/friendships/".concat(this.recipient.name)).then(function (res) {
+        _this.localFriendshipStatus = res.data;
       })["catch"](function (err) {
         console.log(err.response.data);
       });
     }
   },
   computed: {
+    getMethod: function getMethod() {
+      if (this.localFriendshipStatus === 'pending') return 'delete';
+      return 'post';
+    },
     getTextBtn: function getTextBtn() {
-      if (this.friendshipStatus == 'pending') return 'Solicitud enviada';
+      if (this.localFriendshipStatus == 'pending') return 'Cancelar solicitud';
       return 'Solicitar amistad';
     }
   }
@@ -38445,7 +38454,7 @@ var render = function() {
   return _c("button", {
     attrs: { dusk: "request-friendship" },
     domProps: { textContent: _vm._s(_vm.getTextBtn) },
-    on: { click: _vm.sendFriendshipRequest }
+    on: { click: _vm.toggleFriendshipStatus }
   })
 }
 var staticRenderFns = []
