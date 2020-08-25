@@ -63,7 +63,10 @@ class CanRequestFriendshipsTest extends TestCase
         'sender_id' => $sender->id,
         'recipient_id' => $recipient->id
       ]);
-      $this->actingAs($sender)->deleteJson(route('friendships.destroy',$recipient));
+      $response = $this->actingAs($sender)->deleteJson(route('friendships.destroy',$recipient));
+      $response->assertJson([
+        'friendship_status' => 'deleted'
+      ]);
       $this->assertDatabaseMissing('friendships',[
         'recipient_id' => $recipient->id,
         'sender_id' => $sender->id,

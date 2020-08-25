@@ -1,5 +1,5 @@
 <template>
-  <button dusk="request-friendship" @click="toggleFriendshipStatus" v-text="getTextBtn"></button>
+  <button@click="toggleFriendshipStatus" v-text="getTextBtn"></button>
 </template>
 
 <script>
@@ -16,15 +16,15 @@
     },
     data(){
       return {
-          localFriendshipStatus:this.fiendshipStatus
+          localFriendshipStatus:this.friendshipStatus
       }
     },
     methods:{
       toggleFriendshipStatus(){
-        let method = this.getMethod();
+        let method = this.getMethod;
         axios[method](`/friendships/${this.recipient.name}`)
              .then( res => {
-                this.localFriendshipStatus = res.data
+                this.localFriendshipStatus = res.data.friendship_status
              })
              .catch( err => {
                console.log(err.response.data)

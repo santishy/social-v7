@@ -1925,16 +1925,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      localFriendshipStatus: this.fiendshipStatus
+      localFriendshipStatus: this.friendshipStatus
     };
   },
   methods: {
     toggleFriendshipStatus: function toggleFriendshipStatus() {
       var _this = this;
 
-      var method = this.getMethod();
+      var method = this.getMethod;
       axios[method]("/friendships/".concat(this.recipient.name)).then(function (res) {
-        _this.localFriendshipStatus = res.data;
+        _this.localFriendshipStatus = res.data.friendship_status;
       })["catch"](function (err) {
         console.log(err.response.data);
       });
@@ -38452,7 +38452,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("button", {
-    attrs: { dusk: "request-friendship" },
     domProps: { textContent: _vm._s(_vm.getTextBtn) },
     on: { click: _vm.toggleFriendshipStatus }
   })
