@@ -8,6 +8,10 @@ use App\Models\Friendship;
 
 class AcceptFriendshipsController extends Controller
 {
+    public function index(){
+      $friendshipsRequest = Friendship::with('sender')->where(['recipient_id' => auth()->id()]);
+      return view('friendships.index',compact('friendshipsRequest'));
+    }
     public function store(User $sender){
       Friendship::where([
         'sender_id' => $sender->id,

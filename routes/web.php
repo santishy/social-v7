@@ -42,13 +42,15 @@ Route::delete('/friendships/{recipient}','FriendshipsController@destroy')->name(
 //Request Friendships
 Route::post('/accept-friendships/{sender}','AcceptFriendshipsController@store')->name('accept-friendships.store')->middleware('auth');
 Route::delete('/accept-friendships/{sender}','AcceptFriendshipsController@destroy')->name('accept-friendships.destroy')->middleware('auth');
-
+Route::get('/friendships/request','AcceptFriendshipsController@index')->name('accept-friendships.index');
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::auth();
 Auth::routes();
+
+
 
 
 Route::get('/home', 'HomeController@index')->name('home');
