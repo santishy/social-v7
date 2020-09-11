@@ -96,6 +96,9 @@ class CanRequestFriendshipsTest extends TestCase
 
       $response = $this->actingAs($recipient)
                        ->postJson(route('accept-friendships.store',$sender)); //usamos otro controlador aparentemente por que es otra ruta de soliciutd de amistad y cambia el nombre del controlador y usamos post por q se crea la nueva a mistad ojo pero se modifica la tabla friendships
+      $response->assertJson([
+          'friendship_status' => 'accepted'
+      ]);
       $this->assertDatabaseHas('friendships',[
         'recipient_id' => $recipient->id,
         'sender_id' => $sender->id,
@@ -123,7 +126,10 @@ class CanRequestFriendshipsTest extends TestCase
         'recipient_id' => $recipient->id,
       ]);
 
-      $this->actingAs($recipient)->deleteJson(route('accept-friendships.destroy',$sender)); //usamos otro controlador aparentemente por que es otra ruta de soliciutd de amistad y cambia el nombre del controlador y usamos post por q se crea la nueva a mistad ojo pero se modifica la tabla friendships
+      $response = $this->actingAs($recipient)->deleteJson(route('accept-friendships.destroy',$sender)); //usamos otro controlador aparentemente por que es otra ruta de soliciutd de amistad y cambia el nombre del controlador y usamos post por q se crea la nueva a mistad ojo pero se modifica la tabla friendships
+      $response->assertJson([
+          'friendship_status' => 'denied'
+      ]);
       $this->assertDatabaseHas('friendships',[
         'recipient_id' => $recipient->id,
         'sender_id' => $sender->id,
