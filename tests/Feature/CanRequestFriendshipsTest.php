@@ -102,7 +102,7 @@ class CanRequestFriendshipsTest extends TestCase
       $this->assertDatabaseHas('friendships',[
         'recipient_id' => $recipient->id,
         'sender_id' => $sender->id,
-        'status' => 'accepted',
+        'status' => 'acepted',
       ]);
     }
 

@@ -17,7 +17,7 @@ class AcceptFriendshipsController extends Controller
         'sender_id' => $sender->id,
         'recipient_id' => auth()->id(),
       ])->update(['status' => 'accepted']);
-      return response()->json(['friendship_status' => 'accepted']);
+      return response()->json(['friendship_status' => 'acepted']);
     }
 
     public function destroy(User $sender){
