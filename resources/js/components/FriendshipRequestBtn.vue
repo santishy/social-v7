@@ -4,7 +4,7 @@
         <button  dusk="accept-friendship" @click="acceptFriendshipRequest">Aceptar solicitud</button>
         <button  dusk="deny-friendship" @click="denyFriendshipRequest">Denegar solicitud</button>
     </div>
-    <div v-else-if="localFriendshipStatus === 'acepted'">
+    <div v-else-if="localFriendshipStatus === 'accepted'">
         Tú y <span>{{sender.name}}</span> son amigos
     </div>
     <div v-else-if="localFriendshipStatus === 'denied'">

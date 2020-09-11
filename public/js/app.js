@@ -38609,7 +38609,7 @@ var render = function() {
           [_vm._v("Denegar solicitud")]
         )
       ])
-    : _vm.localFriendshipStatus === "acepted"
+    : _vm.localFriendshipStatus === "accepted"
     ? _c("div", [
         _vm._v("\n    Tú y "),
         _c("span", [_vm._v(_vm._s(_vm.sender.name))]),
