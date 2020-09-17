@@ -19,7 +19,6 @@ class AcceptFriendshipsController extends Controller
       ])->update(['status' => 'accepted']);
       return response()->json(['friendship_status' => 'accepted']);
     }
-
     public function destroy(User $sender){
       Friendship::where([
         'sender_id' => $sender->id,
