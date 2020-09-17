@@ -1,26 +1,32 @@
 <template>
-    <div v-if="localFriendshipStatus === 'pending'">
-        <span v-text="sender.name"></span> te ha enviado una solicitud de
-        amistad
-        <button dusk="accept-friendship" @click="acceptFriendshipRequest">
-            Aceptar solicitud
+    <div>
+        <div v-if="localFriendshipStatus === 'pending'">
+            <span v-text="sender.name"></span> te ha enviado una solicitud de
+            amistad
+            <button dusk="accept-friendship" @click="acceptFriendshipRequest">
+                Aceptar solicitud
+            </button>
+            <button dusk="deny-friendship" @click="denyFriendshipRequest">
+                Denegar solicitud
+            </button>
+        </div>
+        <div v-else-if="localFriendshipStatus === 'accepted'">
+            Tú y <span>{{ sender.name }}</span> son amigos
+        </div>
+        <div v-else-if="localFriendshipStatus === 'denied'">
+            Solicitud denegada de <span>{{ sender.name }}</span>
+        </div>
+        <div v-if="localFriendshipStatus === 'deleted'">
+            Solicitud eliminada
+        </div>
+        <button
+            v-else
+            dusk="delete-friendship"
+            @click="deleteFriendshipRequest"
+        >
+            Eliminar solicitud
         </button>
-        <button dusk="deny-friendship" @click="denyFriendshipRequest">
-            Denegar solicitud
-        </button>
     </div>
-    <div v-else-if="localFriendshipStatus === 'accepted'">
-        Tú y <span>{{ sender.name }}</span> son amigos
-    </div>
-    <div v-else-if="localFriendshipStatus === 'denied'">
-        Solicitud denegada de <span>{{ sender.name }}</span>
-    </div>
-    <div v-if="localFriendshipStatus === 'deleted'">
-        Solicitud eliminada
-    </div>
-    <button v-else dusk="delete-friendship" @click="deleteFriendshipRequest">
-        Eliminar solicitud
-    </button>
 </template>
 <script>
 export default {
@@ -58,7 +64,7 @@ export default {
                     console.log(err.response.data);
                 });
         },
-        deleteFriendShipRequest() {
+        deleteFriendshipRequest() {
             axios
                 .delete(`/friendships/${this.sender.name}`)
                 .then(res => {

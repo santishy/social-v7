@@ -8,17 +8,22 @@ use Illuminate\Http\Request;
 class FriendshipsController extends Controller
 {
     public function store(User $recipient){
-      Friendship::firstOrCreate([
+      $friendship = Friendship::firstOrCreate([
         'sender_id' => auth()->id(),
         'recipient_id' => $recipient->id,
       ]);
-      return response()->json(['friendship_status' => 'pending']);
+      return response()->json(['friendship_status' => $friendship->fresh()->status]);
     }
-    public function destroy(User $recipient){
-      Friendship::where([
+    public function destroy(User $user){
+      $deleted = Friendship::where([
         'sender_id' => auth()->id(),
-        'recipient_id' => $recipient->id,
-      ])->delete();
-      return response()->json(['friendship_status' => 'deleted']);
+        'recipient_id' => $user->id,
+      ])
+        ->orWhere([
+          'sender_id' => $user->id,
+          'recipient_id' => auth()->id()
+        ])
+        ->delete();
+      return response()->json(['friendship_status' => $deleted ? 'deleted' : '']);
     }
 }

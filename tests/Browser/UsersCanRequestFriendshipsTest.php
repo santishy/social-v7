@@ -79,7 +79,7 @@ class UsersCanRequestFriendshipsTest extends DuskTestCase
     /**
     *@test
     */
-    public function recipients_can_delete_friendship_request(){
+    public function recipients_can_delete_received_friendship_request(){
       $sender = factory(User::class)->create();
       $recipient = factory(User::class)->create();
       Friendship::create([
@@ -95,7 +95,8 @@ class UsersCanRequestFriendshipsTest extends DuskTestCase
                 ->waitForText("Solicitud eliminada")
                 ->assertSee("Solicitud eliminada")
                 ->visit(route('accept-friendships.index'))
-                ->assertDontSee('Solicitud eliminada');
+                ->assertDontSee('Solicitud eliminada')
+                ->assertDontSee($sender->name);
       });
   }
 }
