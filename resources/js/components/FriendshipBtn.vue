@@ -1,5 +1,7 @@
 <template>
-    <button @click="toggleFriendshipStatus" v-text="getTextBtn"></button>
+    <div>
+        <button @click="toggleFriendshipStatus">{{ getTextBtn }}</button>
+    </div>
 </template>
 
 <script>
@@ -33,7 +35,11 @@ export default {
     },
     computed: {
         getMethod() {
-            if (this.localFriendshipStatus === "pending") return "delete";
+            if (
+                this.localFriendshipStatus === "pending" ||
+                this.localFriendshipStatus === "accepted"
+            )
+                return "delete";
             return "post";
         },
         getTextBtn() {
@@ -41,6 +47,8 @@ export default {
                 return "Cancelar solicitud";
             if (this.localFriendshipStatus === "accepted")
                 return "Eliminar de mis amigos";
+            if(this.localFriendshipStatus === 'denied')
+                return "Solicitud denegada"
             return "Solicitar amistad";
         }
     }
