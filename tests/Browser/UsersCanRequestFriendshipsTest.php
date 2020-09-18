@@ -22,16 +22,39 @@ class UsersCanRequestFriendshipsTest extends DuskTestCase
           $browser->loginAs($sender)
                   ->visit(route('users.show',$recipient))
                   ->press('@request-friendship')
-                  ->waitForText('Cancelar solicitud')
-                  ->assertSee('Cancelar solicitud')
+                  ->waitForText('Solicitar amistad')
+                  ->assertSee('Solicitar amistad')
                   ->visit(route('users.show',$recipient))
-                  ->waitForText('Cancelar solicitud')
-                  ->assertSee('Cancelar solicitud')
+                  ->waitForText('Solicitar amistad')
+                  ->assertSee('Solicitar amistad')
                   ->press('@request-friendship')
                   ->waitForText('Solicitar amistad')
                   ->assertSee('Solicitar amistad');
         });
     }
+     /**
+    *@test
+    */
+    public function senders_can_delete_accepted_friendship_request(){
+      $sender = factory(User::class)->create(['name' => 'sender']);
+      $recipient = factory(User::class)->create(['name' => 'recipient']);
+      Friendship::create([
+        'sender_id' => $sender->id,
+        'recipient_id' => $recipient->id,
+        'status' => 'accepted'
+      ]);
+      $this->browse(function (Browser $browser) use ($sender,$recipient) {
+        $browser->loginAs($sender)
+                ->visit(route('users.show',$recipient))
+                ->assertSee('Eliminar de mis amigos');
+                // ->press('@request-friendship')
+                // ->waitForText('Solicitar amistad')
+                // ->assertSee('Solicitar amistad')
+                // ->visit(route('users.show',$recipient))
+                // ->waitForText('Solicitar amistad')
+                // ->assertSee('Solicitar amistad');
+      });
+  }
     /**
     *@test
     */
