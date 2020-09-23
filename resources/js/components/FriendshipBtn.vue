@@ -1,6 +1,11 @@
 <template>
     <div>
-        <button @click="toggleFriendshipStatus">{{ getTextBtn }}</button>
+        <button
+            class="btn btn-primary btn-block"
+            @click="toggleFriendshipStatus"
+        >
+            {{ getTextBtn }}
+        </button>
     </div>
 </template>
 
@@ -47,8 +52,8 @@ export default {
                 return "Cancelar solicitud";
             if (this.localFriendshipStatus === "accepted")
                 return "Eliminar de mis amigos";
-            if(this.localFriendshipStatus === 'denied')
-                return "Solicitud denegada"
+            if (this.localFriendshipStatus === "denied")
+                return "Solicitud denegada";
             return "Solicitar amistad";
         }
     }

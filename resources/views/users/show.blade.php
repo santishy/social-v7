@@ -11,7 +11,6 @@
                 :recipient="{{$user}}"
                 friendship-status="{{$friendshipStatus}}"
                 dusk="request-friendship" 
-                class="btn btn-primary btn-block"
             >
             </friendship-btn>
           </div>
