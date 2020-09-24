@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="card-footer">
-      <div v-for="comment in comments">
+      <div :key="comment.id" v-for="comment in comments">
         <div class="d-flex">
           <img class="rounded shadow-sm mr-3" height="34px" width="34px" :src="comment.user.avatar" :alt="comment.user.name">
           <div class="flex-grow-1">
