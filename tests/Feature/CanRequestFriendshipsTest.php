@@ -43,7 +43,18 @@ class CanRequestFriendshipsTest extends TestCase
     $this->actingAs($sender)->postJson(route('friendships.store', $recipient));
     $this->assertCount(1, Friendship::all());
   }
-
+  /**
+  *@test
+  */
+  public function a_user_cannot_send_request_to_itself(){
+    $sender = factory(User::class)->create();
+    $response = $this->actingAs($sender)->postJson(route('friendships.store', $sender));
+    $this->assertDatabaseMissing('friendships', [
+      'recipient_id' => $sender->id,
+      'sender_id' => $sender->id,
+      'status' => 'pending',
+    ]);
+  }
   /**
    *@test
    */
@@ -108,6 +119,8 @@ class CanRequestFriendshipsTest extends TestCase
     $sender = factory(User::class)->create();
     $response = $this->postJson(route('accept-friendships.store', $sender)); //usamos otro controlador aparentemente por que es otra ruta de soliciutd de amistad y cambia el nombre del controlador y usamos post por q se crea la nueva a mistad ojo pero se modifica la tabla friendships
     $response->assertStatus(401);
+    $response = $this->get(route('accept-friendships.index'));
+    $response->assertRedirect('login');
   }
   /**
    *@test

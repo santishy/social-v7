@@ -1939,6 +1939,7 @@ __webpack_require__.r(__webpack_exports__);
     toggleFriendshipStatus: function toggleFriendshipStatus() {
       var _this = this;
 
+      this.redirectIfGuest();
       var method = this.getMethod;
       axios[method]("/friendships/".concat(this.recipient.name)).then(function (res) {
         _this.localFriendshipStatus = res.data.friendship_status;
@@ -1958,6 +1959,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.localFriendshipStatus === "denied") return "Solicitud denegada";
       return "Solicitar amistad";
     }
+    /* recipientIsCurrentUser(){
+         return this.currentUser.id === this.recipient.id;
+     }*/
+
   }
 });
 

@@ -28,6 +28,7 @@ export default {
     },
     methods: {
         toggleFriendshipStatus() {
+            this.redirectIfGuest();
             let method = this.getMethod;
             axios[method](`/friendships/${this.recipient.name}`)
                 .then(res => {
@@ -55,7 +56,10 @@ export default {
             if (this.localFriendshipStatus === "denied")
                 return "Solicitud denegada";
             return "Solicitar amistad";
-        }
+        },
+       /* recipientIsCurrentUser(){
+            return this.currentUser.id === this.recipient.id;
+        }*/
     }
 };
 </script>

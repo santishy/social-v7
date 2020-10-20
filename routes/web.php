@@ -42,7 +42,7 @@ Route::delete('/friendships/{user}','FriendshipsController@destroy')->name('frie
 //Request Friendships
 Route::post('/accept-friendships/{sender}','AcceptFriendshipsController@store')->name('accept-friendships.store')->middleware('auth');
 Route::delete('/accept-friendships/{sender}','AcceptFriendshipsController@destroy')->name('accept-friendships.destroy')->middleware('auth');
-Route::get('/friendships/request','AcceptFriendshipsController@index')->name('accept-friendships.index');
+Route::get('/friendships/request','AcceptFriendshipsController@index')->name('accept-friendships.index')->middleware('auth');
 Route::get('/', function () {
     return view('welcome');
 });
