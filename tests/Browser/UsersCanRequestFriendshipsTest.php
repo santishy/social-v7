@@ -15,6 +15,20 @@ class UsersCanRequestFriendshipsTest extends DuskTestCase
     /**
     *@test
     */
+    public function guests_cannot_create_and_delete_friendship_request(){
+      $recipient = factory(User::class)->create();
+      $this->browse(function (Browser $browser) use ($recipient) {
+        $browser->visit(route('users.show',$recipient))
+                ->waitForText('Solicitar amistad',7)
+                ->assertSee('Solicitar amistad')
+                ->press('@request-friendship')
+                
+                ->assertPathIs('/login');
+      });
+  }
+    /**
+    *@test
+    */
     public function senders_can_create_and_delete_friendship_request(){
         $sender = factory(User::class)->create();
         $recipient = factory(User::class)->create();
@@ -31,20 +45,7 @@ class UsersCanRequestFriendshipsTest extends DuskTestCase
                   ->assertSee('Solicitar amistad');
         });
     }
-    /**
-    *@test
-    */
-    public function guests_cannot_create_and_delete_friendship_request(){
-      $recipient = factory(User::class)->create();
-      $this->browse(function (Browser $browser) use ($recipient) {
-        $browser->visit(route('users.show',$recipient))
-                ->waitForText('Solicitar amistad',7)
-                ->assertSee('Solicitar amistad')
-                ->press('@request-friendship')
-                
-                ->assertPathIs('/login');
-      });
-  }
+    
     /**
     *@test
     */

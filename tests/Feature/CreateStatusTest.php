@@ -6,6 +6,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\User;
+use App\Events\StatusCreated;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use App\Http\Resources\StatusResource;
+use App\Models\Status;
+use Illuminate\Broadcasting\Broadcasters\Broadcaster;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Event;
+
 
 class CreateStatusTest extends TestCase
 {
@@ -17,7 +25,7 @@ class CreateStatusTest extends TestCase
      */
     public function an_authenticated_user_can_crate_statuses()
     {
-      $this->withoutExceptionHandling();
+      
       $user = factory(User::class)->create();
       $this->actingAs($user);
       $response = $this->postJson(route('statuses.store'),['body' => 'Mi primer estado']);
@@ -27,7 +35,23 @@ class CreateStatusTest extends TestCase
                                             'user_id' => $user->id
                                           ]);
     }
-
+    /**
+     * @test
+     */
+    public function an_event_is_fired_when_a_status_is_created(){
+      Event::fake([Statuscreated::class]); // esto evita que ejecuten todos los listeners de la app
+      Broadcast::shouldReceive('socket')->andReturn('socket-id');
+      $user = factory(User::class)->create();
+       $this->actingAs($user)->postJson(route('statuses.store'),['body' => 'Mi primer estado']);
+      Event::assertDispatched(StatusCreated::class,function($e){
+        $this->assertInstanceOf(ShouldBroadcast::class,$e);
+        $this->assertInstanceOf(Status::class,$e->status->resource);
+        $this->assertInstanceOf(StatusResource::class,$e->status);
+        $this->assertEquals(Status::first()->id,$e->status->id);
+        $this->assertEquals($e->socket,'socket-id','The event ' . get_class($e) . 'must call the method "dontBroadcastToCurrentUser" in the constructor');
+        return true;
+      });
+    }
     /**
     *
     *@test
