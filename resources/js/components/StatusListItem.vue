@@ -30,92 +30,36 @@
                   </span>
       </div>
     </div>
-    <div class="card-footer">
-      <div :key="comment.id" v-for="comment in comments">
-        <div class="d-flex">
-          <img class="rounded shadow-sm mr-3" height="34px" width="34px" :src="comment.user.avatar" :alt="comment.user.name">
-          <div class="flex-grow-1">
-            <div class="card border-0 shadow-sm ">
-              <div class="card-body  p-2  text-secondary">
-                <a :href="comment.user.link"><strong>{{ comment.user.name }}</strong></a> {{ comment.body }}
-              </div>
-            </div>
-            <small dusk="comment-likes-count"
-                   class="float-right badge badge-primary badge-pill mt-1"
-            >
-              <i class="fa fa-thumbs-up"></i>
-              {{comment.likes_count}}
-            </small>
-            <like-btn :url='`/comments/${comment.id}/likes`'
-                      :model="comment"
-                      selector="comment-like-btn"
-                      class="comments-like-btn"
-            >
-            </like-btn>
-          </div>
-        </div>
-      </div>
-      <form @submit.prevent="addComment" v-if="isAuthenticated">
-        <div class="d-flex align-items-center">
-          <img class="rounded float-left shadow-sm mr-3"
-               width="34px"
-               :src="currentUser.avatar"
-               :alt="currentUser.name"
-          />
-        
-          <div class="input-group">
-            <textarea v-model="newComment"
-                      class="form-control border-0 shadow-sm"
-                      placeholder="Escribe un comentario..."
-                      rows="1"
-                      name="comment"
-                      required
-            >
-            </textarea>
-            <div class="input-group-append">
-                <button dusk="comment-btn" class="btn btn-primary">Enviar</button>
-            </div>
-          </div>
-        </div>
-      </form>
+    <div class="card-footer pb-0" v-if="isAuthenticated || status.comments.length">
+      <comment-list 
+          :comments="status.comments" 
+          :status-id="status.id"
+      />
+      <comment-form :status-id="status.id"/>
     </div>
-  </div>
+    <div v-else class="mb-3 text-center ">
+      Debes <a href="/login">autenticarte</a> para poder comentar
+    </div>
   </div>
 
 </template>
 
 <script>
+import CommentForm from './CommentForm';
 import LikeBtn from './LikeBtn';
+import CommentList from './CommentList.vue';
 export default {
-  data() {
-    return {
-      newComment: '',
-      comments: this.status.comments,
-    };
-  },
   components: {
     LikeBtn,
+    CommentList,
+    CommentForm
   },
   props: {
     status: {
       type: Object,
     },
   },
-  methods: {
-    addComment() {
-      axios
-        .post(`/statuses/${this.status.id}/comments`, {
-          body: this.newComment,
-        })
-        .then(res => {
-          this.newComment = '';
-          this.comments.push(res.data.data);
-        })
-        .catch(error => {
-          console.log(error.response.data);
-        });
-    },
-  }
+
 }
 </script>
 <style lang="scss" >

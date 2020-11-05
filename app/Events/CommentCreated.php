@@ -32,6 +32,6 @@ class CommentCreated implements ShouldBroadcast //se implementa shouldbroadcast 
      */
     public function broadcastOn()
     {
-        return new Channel('comments');
+        return new Channel("statuses.{$this->comment->status_id}.comments");
     }
 }

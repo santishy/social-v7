@@ -12,6 +12,7 @@ use App\User;
 class UsersCanCommentStatusTest extends DuskTestCase
 {
   use DatabaseMigrations;
+  
   /**
   *@test
   */
@@ -29,6 +30,29 @@ class UsersCanCommentStatusTest extends DuskTestCase
                 ->waitForText('Mi primer comentario');
     });
   }
+  /**
+   * @test
+   */
+  public function users_can_see_comments_in_real_time(){
+    $comment = 'Mi primer comentario';
+    $status = factory(Status::class)->create();
+    $user = factory(User::class)->create();
+    $this->browse(function (Browser $browser1,Browser $browser2) use ($user,$status,$comment){
+        $browser1->visit('/');
+        $browser2->loginAs($user)
+            ->visit('/')
+            ->waitForText($status->body)
+            ->type('comment',$comment)
+            ->press('@comment-btn')
+            ->waitForText($comment)
+            ->assertSee($comment);
+
+        $browser1->waitForText($comment,7)
+            ->assertSee($comment);
+    });
+  
+  }
+  
   /**
   *@test
   */
