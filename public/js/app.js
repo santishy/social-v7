@@ -2029,19 +2029,22 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     }
   },
+  data: function data() {
+    return {
+      localComments: this.comments
+    };
+  },
   components: {
     LikeBtn: _LikeBtn__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   mounted: function mounted() {
     var _this = this;
 
-    Echo.channel("statuses.".concat(this.statusId, ".comments")).listen("CommentCreated", function (_ref) {
-      var comment = _ref.comment;
-
-      _this.comments.push(comment);
+    Echo.channel("statuses.".concat(this.statusId, ".comments")).listen("CommentCreated", function (e) {
+      _this.localComments.push(e.comment);
     });
     EventBus.$on("statuses.".concat(this.statusId, ".comments"), function (comment) {
-      _this.comments.push(comment);
+      _this.localComments.push(comment);
     });
   }
 });
@@ -6922,7 +6925,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.status-list-transition-move{\r\n  transition: all .8s;\n}\r\n", ""]);
+exports.push([module.i, "\n.status-list-transition-move{\n  transition: all .8s;\n}\n", ""]);
 
 // exports
 
@@ -44944,7 +44947,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.comments, function(comment) {
+    _vm._l(_vm.localComments, function(comment) {
       return _c("div", { key: comment.id }, [
         _c("div", { staticClass: "d-flex" }, [
           _c("img", {
@@ -58284,8 +58287,8 @@ var user = document.head.querySelector('meta[name="user"]');
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\social\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\social\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/vagrant/code/social/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/vagrant/code/social/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

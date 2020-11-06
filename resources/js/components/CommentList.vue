@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :key="comment.id" v-for="comment in comments">
+        <div :key="comment.id" v-for="comment in localComments">
             <div class="d-flex">
                 <img
                     class="rounded shadow-sm mr-3"
@@ -51,16 +51,21 @@ export default {
             required:true
         }
     },
+    data(){
+        return{
+            localComments:this.comments
+        }
+    },
     components: { LikeBtn },
     mounted() {
         Echo.channel(`statuses.${this.statusId}.comments`).listen(
             "CommentCreated",
-            ({ comment }) => {
-                this.comments.push(comment);
+            (e) => {
+                this.localComments.push(e.comment);
             }
         );
         EventBus.$on(`statuses.${this.statusId}.comments`,(comment) => {
-            this.comments.push(comment);
+            this.localComments.push(comment);
         })
     }
 };

@@ -12,59 +12,60 @@ use App\User;
 class UsersCanCommentStatusTest extends DuskTestCase
 {
   use DatabaseMigrations;
-  
+
   /**
-  *@test
-  */
+   *@test
+   */
   public function authenticated_users_can_comment_status()
   {
     $status = factory(Status::class)->create();
     $user = factory(User::class)->create();
-    $this->browse(function (Browser $browser) use ($user,$status) {
-        $browser->loginAs($user)
-                ->visit('/')
-                ->waitForText($status->body)
-                ->assertSee($status->body)
-                ->type('comment','Mi primer comentario')
-                ->press('@comment-btn')
-                ->waitForText('Mi primer comentario');
+    $this->browse(function (Browser $browser) use ($user, $status) {
+      $browser->loginAs($user)
+        ->visit('/')
+        ->waitForText($status->body)
+        ->assertSee($status->body)
+        ->type('comment', 'Mi primer comentario')
+        ->press('@comment-btn')
+        ->waitForText('Mi primer comentario');
     });
   }
   /**
    * @test
    */
-  public function users_can_see_comments_in_real_time(){
+  public function users_can_see_comments_in_real_time()
+  {
     $comment = 'Mi primer comentario';
     $status = factory(Status::class)->create();
     $user = factory(User::class)->create();
-    $this->browse(function (Browser $browser1,Browser $browser2) use ($user,$status,$comment){
-        $browser1->visit('/');
-        $browser2->loginAs($user)
-            ->visit('/')
-            ->waitForText($status->body)
-            ->type('comment',$comment)
-            ->press('@comment-btn')
-            ->waitForText($comment)
-            ->assertSee($comment);
+    $this->browse(function (Browser $browser1, Browser $browser2) use ($user, $status, $comment) {
+      $browser1->visit('/');
+      $browser2->loginAs($user)
+        ->visit('/')
+        ->waitForText($status->body)
+        ->type('comment', $comment)
+        ->press('@comment-btn')
+        ->waitForText($comment)
+        ->assertSee($comment);
 
-        $browser1->waitForText($comment,7)
-            ->assertSee($comment);
+      $browser1->waitForText($comment)
+        ->assertSee($comment);
     });
-  
   }
-  
+
   /**
-  *@test
-  */
-  public function users_can_see_comments(){
+   *@test
+   */
+  public function users_can_see_comments()
+  {
     $status = factory(Status::class)->create();
-    $comments = factory(Comment::class,2)->create(['status_id' => $status->id]);
-    $this->browse(function (Browser $browser) use ($status,$comments) {
+    $comments = factory(Comment::class, 2)->create(['status_id' => $status->id]);
+    $this->browse(function (Browser $browser) use ($status, $comments) {
       $browser->visit('/')
-              ->waitForText($status->body);
-      foreach($comments as $comment){
+        ->waitForText($status->body);
+      foreach ($comments as $comment) {
         $browser->assertSee($comment->body)
-                ->assertSee($comment->user->name);
+          ->assertSee($comment->user->name);
       }
     });
   }
