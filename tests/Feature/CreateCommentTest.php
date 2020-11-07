@@ -52,12 +52,15 @@ class CreateCommentTest extends TestCase
       $status = factory(Status::class)->create();
       $user = factory(User::class)->create();
       $this->actingAs($user)->postJson(route('statuses.comments.store',$status),['body' => 'status commented']);
-      Event::assertDispatched(CommentCreated::class,function($commentCreatedEvent){
-        $this->assertInstanceOf(Comment::class,$commentCreatedEvent->comment->resource);
-        $this->assertInstanceOf(CommentResource::class,$commentCreatedEvent->comment);
-        $this->assertInstanceOf(ShouldBroadcast::class,$commentCreatedEvent);
-        $this->assertEquals(Comment::first()->id,$commentCreatedEvent->comment->id);
-        $this->assertEquals('socket-id',$commentCreatedEvent->socket,'The event ' . get_class($commentCreatedEvent) . 'must implement the method "dontBroadcastToCurrentUser" in the construct');
+      Event::assertDispatched(CommentCreated::class,function($e){ 
+        //$this->assertInstanceof(\Illuminate\Broadcasting\Channel::class,$e->broadcastOn()); // ESTE ASSERT NO ES PRECISO YA QUE , SI PONGO UN privateChannel me daria true por que privateChannel implementa la clase Channel
+        $this->assertEventChannelType('public',$e);
+        $this->assertEventChannelName('statuses.'.$e->comment->id.'.comments',$e);
+        $this->assertInstanceOf(CommentResource::class,$e->comment);
+        /*$this->assertEquals(Status::first()->id,$e->status->id);
+        $this->assertInstanceOf(Status::class,$e->status->resource); ESTAS DOS LINEAS SON REEMPLAZADAS CON $this->assertTrue(Status::first()->is($e->status->resource));*/
+        $this->assertTrue(Comment::first()->is($e->comment->resource));
+        $this->assertDontBroadcastToCurrentUser($e);
         return true;
       });
 

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\User;
 use App\Events\StatusCreated;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
 use App\Http\Resources\StatusResource;
 use App\Models\Status;
 use Illuminate\Broadcasting\Broadcasters\Broadcaster;
@@ -44,11 +44,16 @@ class CreateStatusTest extends TestCase
       $user = factory(User::class)->create();
        $this->actingAs($user)->postJson(route('statuses.store'),['body' => 'Mi primer estado']);
       Event::assertDispatched(StatusCreated::class,function($e){
-        $this->assertInstanceOf(ShouldBroadcast::class,$e);
-        $this->assertInstanceOf(Status::class,$e->status->resource);
+      
+       
+        $this->assertInstanceof(\Illuminate\Broadcasting\Channel::class,$e->broadcastOn()); // ESTE ASSERT NO ES PRECISO YA QUE , SI PONGO UN privateChannel me daria true por que privateChannel implementa la clase Channel
+        $this->assertEventChannelType('public',$e);
+        $this->assertEventChannelName('statuses',$e);
         $this->assertInstanceOf(StatusResource::class,$e->status);
-        $this->assertEquals(Status::first()->id,$e->status->id);
-        $this->assertEquals($e->socket,'socket-id','The event ' . get_class($e) . 'must call the method "dontBroadcastToCurrentUser" in the constructor');
+        /*$this->assertEquals(Status::first()->id,$e->status->id);
+        $this->assertInstanceOf(Status::class,$e->status->resource); */
+        $this->assertTrue(Status::first()->is($e->status->resource));
+        $this->assertDontBroadcastToCurrentUser($e);
         return true;
       });
     }

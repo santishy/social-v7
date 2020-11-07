@@ -7,17 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Like;
 use App\User;
 use Tests\TestCase;
+//use PHPUnit\Framework\TestCase;
+use Illuminate\Database\Schema\Blueprint;
 use App\Traits\HasLikes;
+use Illuminate\Support\Facades\Event;
+use App\Events\ModelLiked;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Schema;
 
 class HasLikesTest extends TestCase
 {
   use RefreshDatabase;
+
+  protected function setUp():void{
+    parent::setUp();
+    Schema::create('model_with_likes',function(Blueprint $table){
+      $table->id();
+    });
+  }
   /**
   *@test
   */
   public function a_model_morph_many_likes(){
     $this->withoutExceptionHandling();
-    $model = new ModelWithLikes(['id' => 1]);
+    $model = ModelWithLike::create();
     $like = factory(Like::class)->create([
       'likeable_id' => $model->id,
       'likeable_type' => get_class($model),
@@ -27,7 +40,7 @@ class HasLikesTest extends TestCase
 
   /** @test */
   public function a_model_can_be_liked_and_unlike(){
-    $model = new ModelWithLikes(['id' => 1]);
+    $model = ModelWithLike::create();
     $this->actingAs(factory(User::class)->create());
     $this->assertInstanceOf(Like::class,$model->like());
     $this->assertEquals(1,$model->likes()->count());
@@ -37,7 +50,7 @@ class HasLikesTest extends TestCase
 
   /** @test */
   public function a_model_can_be_liked_once(){
-    $model = new ModelWithLikes(['id' => 1]);
+    $model = ModelWithLike::create();
     $this->actingAs(factory(User::class)->create());
     $model->like();
     $this->assertInstanceOf(Like::class,$model->like());
@@ -48,7 +61,7 @@ class HasLikesTest extends TestCase
   /** @test */
   public function a_model_knows_if_it_been_liked(){
     $user = factory(User::class)->create();
-    $model = new ModelWithLikes(['id' => 1]);
+    $model =ModelWithLike::create();
     $this->actingAs($user);
     $this->assertFalse($model->isLiked());
     $model->like();
@@ -56,7 +69,7 @@ class HasLikesTest extends TestCase
   }
   /** @test */
   public function a_model_knows_how_many_likes_it_has(){
-    $model = new ModelWithLikes(['id' => 1]);
+    $model = ModelWithLike::create();
     $this->assertEquals(0,$model->likesCount());
     factory(Like::class,2)->create([
                                     'likeable_id' => $model->id,
@@ -64,10 +77,35 @@ class HasLikesTest extends TestCase
                                   ]);
     $this->assertEquals(2,$model->likesCount());
   }
+  /** @test */
+  public function an_event_fired_when_a_model_is_liked(){
+    Event::fake([ModelLiked::class]);
+    Broadcast::shouldReceive('socket')->andReturn('socket-id');
+    $model  = ModelWithLike::create();
+    $this->actingAs(factory(User::class)->create());
+    $model->like();
+    
+    Event::assertDispatched(ModelLiked::class,function($e){ 
+      $this->assertInstanceOf(ModelWithLike::class,$e->model,'esta no es una isntacia de model');
+      $this->assertEventChannelType('public',$e);
+      $this->assertEventChannelName($e->model->eventChannelName(),$e);
+      $this->assertDontBroadcastToCurrentUser($e);
+      return true;
+    });
+  }
+  /** @test */
+  public function can_get_the_event_channel_name(){
+    $model  = ModelWithLike::create();
+    $this->assertEquals(
+      'modelwithlikes.1.likes',
+      $model->eventChannelName()
+    );
+  }
 }
 
-class ModelWithLikes extends Model
+class ModelWithLike extends Model
 {
   protected $fillable =['id'];
+  public $timestamps=false;
   use HasLikes;
 }

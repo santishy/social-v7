@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Traits;
+
+use App\Events\ModelLiked;
 use App\Models\Like;
+use Illuminate\Support\Str;
 
 trait HasLikes
 {
@@ -10,9 +13,11 @@ trait HasLikes
     }
 
     public function like(){
+      ModelLiked::dispatch($this);
       return $this->likes()->firstOrCreate([
         'user_id' => auth()->id()
       ]);
+        
     }
 
     public function unliked(){
@@ -29,5 +34,9 @@ trait HasLikes
    
    public function likesCount(){
      return $this->likes()->count();
+   }
+
+   public function eventChannelName(){
+     return strtolower(str::plural(class_basename($this))).'.'.$this->id.'.likes';
    }
 }
