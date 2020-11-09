@@ -8,10 +8,12 @@ use App\Models\Like;
 use App\User;
 use Tests\TestCase;
 //use PHPUnit\Framework\TestCase;
+
 use Illuminate\Database\Schema\Blueprint;
 use App\Traits\HasLikes;
 use Illuminate\Support\Facades\Event;
 use App\Events\ModelLiked;
+use App\Events\ModelUnliked;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Schema;
 
@@ -90,6 +92,24 @@ class HasLikesTest extends TestCase
       $this->assertEventChannelType('public',$e);
       $this->assertEventChannelName($e->model->eventChannelName(),$e);
       $this->assertDontBroadcastToCurrentUser($e);
+      return true;
+    });
+  }
+   /** @test */
+   public function an_event_fired_when_a_model_is_unliked(){
+    Event::fake([ModelUnliked::class]);
+    Broadcast::shouldReceive('socket')->andReturn('socket-id');
+    $model  = ModelWithLike::create();
+    $this->actingAs(factory(User::class)->create());
+    $model->likes()->firstOrCreate([
+      'user_id' => auth()->id()
+    ]);
+    $model->unliked();
+    Event::assertDispatched(ModelUnliked::class,function($e){ 
+      $this->assertInstanceOf(ModelWithLike::class,$e->model,'esta no es una isntacia de model');
+      //$this->assertEventChannelType('public',$e);
+      //$this->assertEventChannelName($e->model->eventChannelName(),$e);
+      //$this->assertDontBroadcastToCurrentUser($e);
       return true;
     });
   }

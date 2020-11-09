@@ -2443,6 +2443,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2456,6 +2464,13 @@ __webpack_require__.r(__webpack_exports__);
     status: {
       type: Object
     }
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    Echo.channel("statuses.".concat(this.status.id, ".likes")).listen('ModelLiked', function (e) {
+      _this.status.likes_count++;
+    });
   }
 });
 
@@ -45314,7 +45329,11 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "small text-muted" }, [
-            _vm._v("\n          " + _vm._s(_vm.status.ago) + "\n        ")
+            _vm._v(
+              "\n                    " +
+                _vm._s(_vm.status.ago) +
+                "\n                "
+            )
           ])
         ])
       ]),
@@ -45346,9 +45365,9 @@ var render = function() {
           _vm._v(" "),
           _c("span", { attrs: { dusk: "likes-count" } }, [
             _vm._v(
-              "\n                    " +
+              "\n                " +
                 _vm._s(_vm.status.likes_count) +
-                "\n                "
+                "\n            "
             )
           ])
         ])
@@ -45373,9 +45392,9 @@ var render = function() {
           1
         )
       : _c("div", { staticClass: "mb-3 text-center " }, [
-          _vm._v("\n    Debes "),
+          _vm._v("\n        Debes "),
           _c("a", { attrs: { href: "/login" } }, [_vm._v("autenticarte")]),
-          _vm._v(" para poder comentar\n  ")
+          _vm._v(" para poder comentar\n    ")
         ])
   ])
 }
