@@ -107,9 +107,9 @@ class HasLikesTest extends TestCase
     $model->unliked();
     Event::assertDispatched(ModelUnliked::class,function($e){ 
       $this->assertInstanceOf(ModelWithLike::class,$e->model,'esta no es una isntacia de model');
-      //$this->assertEventChannelType('public',$e);
-      //$this->assertEventChannelName($e->model->eventChannelName(),$e);
-      //$this->assertDontBroadcastToCurrentUser($e);
+      $this->assertEventChannelType('public',$e);
+      $this->assertEventChannelName($e->model->eventChannelName(),$e);
+      $this->assertDontBroadcastToCurrentUser($e);
       return true;
     });
   }

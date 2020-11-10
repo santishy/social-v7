@@ -2471,6 +2471,9 @@ __webpack_require__.r(__webpack_exports__);
     Echo.channel("statuses.".concat(this.status.id, ".likes")).listen('ModelLiked', function (e) {
       _this.status.likes_count++;
     });
+    Echo.channel("statuses.".concat(this.status.id, ".unlikes")).listen('ModelLiked', function (e) {
+      _this.status.likes_count++;
+    });
   }
 });
 

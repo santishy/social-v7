@@ -25,7 +25,7 @@ trait HasLikes
       $this->likes()->where([
         'user_id' => auth()->id()
       ])->delete();
-      ModelUnliked::dispatch();
+      ModelUnliked::dispatch($this);
     }
 
    public function isLiked(){
