@@ -35,4 +35,19 @@ class UsersCanLikeCommentsTest extends DuskTestCase
                   ->assertSeeIn('@comment-likes-count',0);
       });
   }
+  /** @test */
+  public function users_can_see_likes_in_real_time(){
+    $user = factory(User::class)->create();
+    $comment = factory(Comment::class)->create();
+    $this->browse(function (Browser $browser1,Browser $browser2) use ($user,$comment) {
+        $browser1->visit('/');
+        $browser2->loginAs($user)
+                ->visit('/')
+                ->waitForText($comment->body,5)
+                ->assertSeeIn('@comment-likes-count',0)
+                ->press('@comment-like-btn')
+                ->waitForText('Te gusta');
+        $browser1->assertSeeIn('@comment-likes-count',1);
+    });
+  }
 }
