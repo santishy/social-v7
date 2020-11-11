@@ -50,7 +50,7 @@ class UsersCanLikeStatusesTest extends DuskTestCase
     /**
      * @test
      */
-    public function users_can_see_likes_in_real_time()
+    public function users_can_see_likes_and_unlikes_in_real_time()
     {
         $user = factory(User::class)->create();
         $status = factory(Status::class)->create();

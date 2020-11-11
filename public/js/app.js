@@ -2471,8 +2471,8 @@ __webpack_require__.r(__webpack_exports__);
     Echo.channel("statuses.".concat(this.status.id, ".likes")).listen('ModelLiked', function (e) {
       _this.status.likes_count++;
     });
-    Echo.channel("statuses.".concat(this.status.id, ".unlikes")).listen('ModelLiked', function (e) {
-      _this.status.likes_count++;
+    Echo.channel("statuses.".concat(this.status.id, ".likes")).listen('ModelUnliked', function (e) {
+      _this.status.likes_count--;
     });
   }
 });
@@ -6938,7 +6938,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.status-list-transition-move{\r\n  transition: all .8s;\n}\r\n", ""]);
+exports.push([module.i, "\n.status-list-transition-move{\n  transition: all .8s;\n}\n", ""]);
 
 // exports
 
@@ -58304,8 +58304,8 @@ var user = document.head.querySelector('meta[name="user"]');
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\social\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\social\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/vagrant/code/social/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/vagrant/code/social/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

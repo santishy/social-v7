@@ -71,8 +71,8 @@ export default {
       Echo.channel(`statuses.${this.status.id}.likes`).listen('ModelLiked',(e) => {
         this.status.likes_count++;
       });
-       Echo.channel(`statuses.${this.status.id}.unlikes`).listen('ModelLiked',(e) => {
-        this.status.likes_count++;
+       Echo.channel(`statuses.${this.status.id}.likes`).listen('ModelUnliked',(e) => {
+        this.status.likes_count--;
       });
     }
 };
