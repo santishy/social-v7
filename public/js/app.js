@@ -44992,18 +44992,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    _vm._l(_vm.comments, function(comment) {
-      return _c(
-        "div",
-        { key: comment.id },
-        [_c("comment-list-item", { attrs: { comment: comment } })],
-        1
-      )
-    }),
-    0
-  )
+  return _c("div", [
+    _c(
+      "div",
+      _vm._l(_vm.comments, function(comment) {
+        return _c("comment-list-item", {
+          key: comment.id,
+          attrs: { comment: comment }
+        })
+      }),
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
