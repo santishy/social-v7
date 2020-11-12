@@ -23,6 +23,7 @@ class HasLikesTest extends TestCase
 
   protected function setUp():void{
     parent::setUp();
+    Event::fake([ModelLiked::class]);// ESTA FACHADA Y METODO FAKE, SIMULA QUE SE EJECUTA EL EVENTO INCLUSO SE PUEDE INSPECCIONAR SUS DATOS DE DICHO EVENTO
     Schema::create('model_with_likes',function(Blueprint $table){
       $table->id();
     });
@@ -42,6 +43,7 @@ class HasLikesTest extends TestCase
 
   /** @test */
   public function a_model_can_be_liked_and_unlike(){
+    
     $model = ModelWithLike::create();
     $this->actingAs(factory(User::class)->create());
     $this->assertInstanceOf(Like::class,$model->like());
@@ -81,17 +83,18 @@ class HasLikesTest extends TestCase
   }
   /** @test */
   public function an_event_fired_when_a_model_is_liked(){
-    Event::fake([ModelLiked::class]);
+    //Event::fake([ModelLiked::class]);
     Broadcast::shouldReceive('socket')->andReturn('socket-id');
     $model  = ModelWithLike::create();
-    $this->actingAs(factory(User::class)->create());
+    $this->actingAs($likeSender = factory(User::class)->create());
     $model->like();
     
-    Event::assertDispatched(ModelLiked::class,function($e){ 
+    Event::assertDispatched(ModelLiked::class,function($e) use($likeSender){ 
       $this->assertInstanceOf(ModelWithLike::class,$e->model,'esta no es una isntacia de model');
       $this->assertEventChannelType('public',$e);
       $this->assertEventChannelName($e->model->eventChannelName(),$e);
       $this->assertDontBroadcastToCurrentUser($e);
+      $this->assertTrue($e->likeSender->is($likeSender));
       return true;
     });
   }

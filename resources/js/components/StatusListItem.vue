@@ -74,7 +74,18 @@ export default {
        Echo.channel(`statuses.${this.status.id}.likes`).listen('ModelUnliked',(e) => {
         this.status.likes_count--;
       });
+      Echo.channel(`statuses.${this.status.id}.comments`).listen(
+            "CommentCreated",
+            e => {
+                this.status.comments.push(e.comment);
+            }
+        );
+
+        EventBus.$on(`statuses.${this.status.id}.comments`, comment => {
+            this.status.comments.push(comment);
+        });
     }
+   
 };
 </script>
 <style lang="scss">

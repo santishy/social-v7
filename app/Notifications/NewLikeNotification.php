@@ -10,15 +10,17 @@ use Illuminate\Notifications\Notification;
 class NewLikeNotification extends Notification
 {
     use Queueable;
-
+    public $likeSender;
+    public $model;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($likeSender,$model)
     {
-        //
+        $this->likeSender = $likeSender;
+        $this->model = $model;
     }
 
     /**
@@ -29,7 +31,7 @@ class NewLikeNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return [];
     }
 
     /**

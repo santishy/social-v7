@@ -14,7 +14,7 @@ trait HasLikes
     }
 
     public function like(){
-      ModelLiked::dispatch($this);
+      ModelLiked::dispatch($this,auth()->user());
       return $this->likes()->firstOrCreate([
         'user_id' => auth()->id()
       ]);

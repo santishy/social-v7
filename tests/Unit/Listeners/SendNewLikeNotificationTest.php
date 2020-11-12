@@ -21,14 +21,21 @@ class SendNewLikeNotificationTest extends TestCase
 
     public function a_notification_sent_when_an_user_receives_an_new_like()
     {
-        
+        //[model , 'mensaje la envio {user}' ,'link' ]
         $statusOwner = factory(User::class)->create();
         $status = factory(Status::class)->create([
             'user_id' => $statusOwner->id
         ]);
+        $likeSender = factory(User::class)->create();
+        $status->likes()->firstOrCreate([
+            'user_id' => $likeSender->id
+        ]);
         FacadesNotification::fake([NewLikeNotification::class]);
-        ModelLiked::dispatch($status);
-        FacadesNotification::assertSentTo($statusOwner,NewLikeNotification::class);
-
+        ModelLiked::dispatch($status,$likeSender);
+        FacadesNotification::assertSentTo($statusOwner, NewLikeNotification::class, function ($notification) use($likeSender,$status) {
+            $this->assertTrue($notification->likeSender->is($likeSender));
+            $this->assertTrue($notification->model->is($status));
+            return true;
+        });
     }
 }
