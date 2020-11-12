@@ -36,19 +36,25 @@
 <script>
 import LikeBtn from "./LikeBtn";
 export default {
-    props:{
-        comment:{
-            type:Object
+    props: {
+        comment: {
+            type: Object
         }
     },
-    components:{LikeBtn},
-    mounted(){
-          Echo.channel(`coments.${this.comment.id}.likes`).listen(
-            'ModelLiked',
-            (e) => {
+    components: { LikeBtn },
+    mounted() {
+        Echo.channel(`comments.${this.comment.id}.likes`).listen(
+            "ModelLiked",
+            e => {
                 this.comment.likes_count++;
             }
         );
+         Echo.channel(`comments.${this.comment.id}.likes`).listen(
+            "ModelUnliked",
+            e => {
+                this.comment.likes_count--;
+            }
+        );
     }
-}
+};
 </script>
