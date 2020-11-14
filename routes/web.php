@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 //routes Statuses
 Route::post('statuses','StatusesController@store')->name('statuses.store')->middleware('auth');
 Route::get('statuses','StatusesController@index')->name('statuses.index');
+Route::get('statuses/{status}','StatusesController@show')->name('statuses.show');
 
 //routes likes
 Route::post('statuses/{status}/likes','StatusLikesController@store')->name('statuses.likes.store')->middleware('auth');

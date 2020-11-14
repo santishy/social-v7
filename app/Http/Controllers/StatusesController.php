@@ -14,10 +14,17 @@ class StatusesController extends Controller
       return StatusResource::collection(Status::latest()->paginate());
     }
     public function store(Request $request){
+      
       $body = $request->validate(['body' => 'required|min:5']);
       $status = $request->user()->statuses()->create($body);
       $statusResource = new statusResource($status);
       StatusCreated::dispatch($statusResource);
       return $statusResource;
+    }
+
+    public function show(Status $status){
+      return view('statuses.show',[
+        'status' => new StatusResource($status)
+      ]);
     }
 }

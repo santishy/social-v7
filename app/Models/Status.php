@@ -20,4 +20,8 @@ class Status extends Model
     public function comments(){
       return $this->hasMany(Comment::class);
     }
+
+    public function path(){
+      return route('statuses.show',$this);
+    }
 }
