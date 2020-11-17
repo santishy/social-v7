@@ -48,6 +48,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//notifications
+Route::get('notifications','NotificationsController@index')->name('notifications.index')->middleware('auth');
+
+//Read notifications
+Route::post('read-notifications/{notification}','ReadNotificationsController@store')->name('read-notifications.store')->middleware('auth');
+Route::delete('read-notifications/{notification}','ReadNotificationsController@destroy')->name('read-notifications.destroy')->middleware('auth');
 Route::auth();
 //Auth::routes();
 
