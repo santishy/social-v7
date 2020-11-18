@@ -9,16 +9,19 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-            v-pre
-
+            :class="this.count ? 'text-primary font-weight-bold' : ''"
         >
-            Notifications <span class="caret"></span>
+            <slot></slot>
+            {{ count }}
+            <span class="caret"></span>
         </a>
-
         <div
             class="dropdown-menu dropdown-menu-right"
             aria-labelledby="dropdownNotifications"
         >
+            <div class="dropdown-header text-center">
+                Notifications
+            </div>
             <notification-list-item
                 v-for="notification in notifications"
                 :key="notification.id"
@@ -32,15 +35,34 @@ import NotificationListItem from "./NotificationListItem.vue";
 export default {
     data() {
         return {
-            notifications: []
+            notifications: [],
+            count: ""
         };
     },
     components: { NotificationListItem },
     created() {
         axios.get("/notifications").then(res => {
             this.notifications = res.data;
-            console.log(this.notifications)
+            this.unreadNotifications();
         });
+        EventBus.$on("read-notification", () => {
+            if (this.count === 1) {
+                return (this.count = "");
+            }
+            return this.count--;
+        });
+
+        EventBus.$on("unread-notification", () => {
+            this.count++;
+        });
+    },
+    methods: {
+        unreadNotifications() {
+            this.count =
+                this.notifications.filter(notification => {
+                    return notification.read_at === null;
+                }).length || "";
+        }
     }
 };
 </script>

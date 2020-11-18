@@ -34,6 +34,7 @@ class UsersCanManageTheirNotificationsTest extends DuskTestCase
                     ->click("@$notification->id")
                     ->assertUrlIs($status->path())
                     ->click('@notifications')
+                    ->pause(1000)
                     ->press("@mark-as-read-{$notification->id}")
                     ->waitFor("@mark-as-unread-{$notification->id}")
                     ->assertMissing("@mark-as-read-{$notification->id}")
