@@ -29,13 +29,17 @@ class UsersCanManageTheirNotificationsTest extends DuskTestCase
             $browser->loginAs($user)
                     ->visit('/')
                     ->click('@notifications')
+                    ->pause(1000)
                     ->assertSee('Has recibido una notificación')
                     ->click("@$notification->id")
                     ->assertUrlIs($status->path())
                     ->click('@notifications')
-                    ->press('@mark-as-read-'.$notification->id)
-                    ->waitForText("@mark-as-unread-$notification->id")
-                    ->assertMissingSee('@mark-as-read-'.$notification->id);
+                    ->press("@mark-as-read-{$notification->id}")
+                    ->waitFor("@mark-as-unread-{$notification->id}")
+                    ->assertMissing("@mark-as-read-{$notification->id}")
+                    ->press("@mark-as-unread-{$notification->id}")
+                    ->waitFor("@mark-as-read-{$notification->id}")
+                    ->assertMissing("@mark-as-unread-{$notification->id}");
         });
     }
 

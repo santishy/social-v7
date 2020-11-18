@@ -1,7 +1,7 @@
 <template>
     <li class="nav-item dropdown">
         <a
-            id="navbarDropdownNotifications"
+            id="dropdownNotifications"
             dusk="notifications"
             class="nav-link dropdown-toggle"
             href="#"
@@ -10,37 +10,36 @@
             aria-haspopup="true"
             aria-expanded="false"
             v-pre
+
         >
             Notifications <span class="caret"></span>
         </a>
 
         <div
             class="dropdown-menu dropdown-menu-right"
-            aria-labelledby="navbarDropdownNotifications"
+            aria-labelledby="dropdownNotifications"
         >
-            <a
+            <notification-list-item
                 v-for="notification in notifications"
-                :dusk="notification.id" 
                 :key="notification.id"
-                class="dropdown-item"
-                :href="notification.data.link"
-            >
-                {{ notification.data.message }} 
-                <button :dusk="`mark-as-read-${notification.id}`" >Leido</button>
-            </a>
+                :notification="notification"
+            ></notification-list-item>
         </div>
     </li>
 </template>
 <script>
+import NotificationListItem from "./NotificationListItem.vue";
 export default {
     data() {
         return {
             notifications: []
         };
     },
+    components: { NotificationListItem },
     created() {
         axios.get("/notifications").then(res => {
             this.notifications = res.data;
+            console.log(this.notifications)
         });
     }
 };
