@@ -131,4 +131,8 @@ class ModelWithLike extends Model
   protected $fillable =['id'];
   public $timestamps=false;
   use HasLikes;
+
+  public function path(){
+    
+  }
 }

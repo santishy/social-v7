@@ -44,5 +44,28 @@ class UsersCanManageTheirNotificationsTest extends DuskTestCase
         });
     }
 
+    /** @test */
+
+    public function users_can_see_their_notifications_in_real_time()
+    {
+        $user1 = factory(User::class)->create();
+        $user2 = factory(User::class)->create() ;
+        $status = factory(Status::class)->create([
+            'user_id' => $user1->id
+        ]);
+        $this->browse(function (Browser $browser1,Browser $browser2) use ($user1,$user2,$status) {
+            $browser1->loginAs($user1)
+                    ->visit('/');
+
+                    $browser2->loginAs($user2)
+                        ->visit('/')
+                        ->waitFor('@like-btn')
+                        ->press('@like-btn');
+
+                    $browser1->pause(1000)
+                        ->assertSeeIn('@notifications-count',1);
+        });
+    }
+
     
 }

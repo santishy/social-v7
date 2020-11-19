@@ -12,15 +12,16 @@
             :class="this.count ? 'text-primary font-weight-bold' : ''"
         >
             <slot></slot>
-            {{ count }}
-            <span class="caret"></span>
+
+            <span dusk="notifications-count"> {{ count }}</span>
         </a>
         <div
             class="dropdown-menu dropdown-menu-right"
             aria-labelledby="dropdownNotifications"
         >
             <div class="dropdown-header text-center">
-                Notifications
+                <slot></slot>
+                <span dusk="notifications-count">{{ count }}</span>
             </div>
             <notification-list-item
                 v-for="notification in notifications"
@@ -41,6 +42,21 @@ export default {
     },
     components: { NotificationListItem },
     created() {
+        if (this.isAuthenticated) {
+            Echo.private(`App.User.${this.currentUser.id}`).notification(
+                notification => {
+                    this.count++;
+                    this.notifications.push({
+                        id: notification.id,
+                        data: {
+                            link: notification.link,
+                            message: notification.message
+                        }
+                    });
+                }
+            );
+        }
+
         axios.get("/notifications").then(res => {
             this.notifications = res.data;
             this.unreadNotifications();

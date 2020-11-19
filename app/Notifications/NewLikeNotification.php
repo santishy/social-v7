@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -31,7 +32,7 @@ class NewLikeNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -60,5 +61,9 @@ class NewLikeNotification extends Notification
             'link' => $this->model->path(),
             'message' => "Al usuario {$this->likeSender->name} le gusto tu publicación."
         ];
+    }
+
+    public function toBroadcast($notifiable){
+        return new BroadcastMessage($this->toDatabase($notifiable));
     }
 }

@@ -34,6 +34,7 @@ class SendNewLikeNotificationTest extends TestCase
         ModelLiked::dispatch($status,$likeSender);
         FacadesNotification::assertSentTo($statusOwner, NewLikeNotification::class, function ($notification,$channels) use($likeSender,$status) {
             $this->assertContains('database',$channels);
+            $this->assertContains('broadcast',$channels);
             $this->assertTrue($notification->likeSender->is($likeSender));
             $this->assertTrue($notification->model->is($status));
             return true;

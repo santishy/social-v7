@@ -2335,6 +2335,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2348,6 +2349,20 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     var _this = this;
+
+    if (this.isAuthenticated) {
+      Echo["private"]("App.User.".concat(this.currentUser.id)).notification(function (notification) {
+        _this.count++;
+
+        _this.notifications.push({
+          id: notification.id,
+          data: {
+            link: notification.link,
+            message: notification.message
+          }
+        });
+      });
+    }
 
     axios.get("/notifications").then(function (res) {
       _this.notifications = res.data;
@@ -45470,8 +45485,10 @@ var render = function() {
       },
       [
         _vm._t("default"),
-        _vm._v("\n        " + _vm._s(_vm.count) + "\n        "),
-        _c("span", { staticClass: "caret" })
+        _vm._v(" "),
+        _c("span", { attrs: { dusk: "notifications-count" } }, [
+          _vm._v(" " + _vm._s(_vm.count))
+        ])
       ],
       2
     ),
@@ -45483,9 +45500,18 @@ var render = function() {
         attrs: { "aria-labelledby": "dropdownNotifications" }
       },
       [
-        _c("div", { staticClass: "dropdown-header text-center" }, [
-          _vm._v("\n            Notifications\n        ")
-        ]),
+        _c(
+          "div",
+          { staticClass: "dropdown-header text-center" },
+          [
+            _vm._t("default"),
+            _vm._v(" "),
+            _c("span", { attrs: { dusk: "notifications-count" } }, [
+              _vm._v(_vm._s(_vm.count))
+            ])
+          ],
+          2
+        ),
         _vm._v(" "),
         _vm._l(_vm.notifications, function(notification) {
           return _c("notification-list-item", {

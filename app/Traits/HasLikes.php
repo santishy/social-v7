@@ -41,4 +41,6 @@ trait HasLikes
    public function eventChannelName(){
      return strtolower(str::plural(class_basename($this))).'.'.$this->id.'.likes';
    }
+
+   abstract function path();
 }
