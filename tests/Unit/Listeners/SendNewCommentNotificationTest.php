@@ -8,6 +8,7 @@ use App\User;
 use App\Notifications\NewCommentNotification;
 use App\Models\Status;
 use App\Models\Comment;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -26,7 +27,10 @@ class SendNewCommentNotificationTest extends TestCase
         ]);
         CommentCreated::dispatch($comment);
         
-        Notification::assertSentTo($status->user,NewCommentNotification::class,function($notification,$channels) use($comment){
+        Notification::assertSentTo($status->user,NewCommentNotification::class,function($notification,$channels) use($comment,$status){
+            $this->assertContains('database',$channels);
+            $this->assertContains('broadcast',$channels);
+            $this->assertInstanceOf(BroadcastMessage::class,$notification->toBroadcast($status->user));
             $this->assertTrue($notification->comment->is($comment));
             return true;
         });

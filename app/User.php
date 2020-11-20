@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Status;
 use App\Models\Comment;
+use App\Models\Friendship;
 
 class User extends Authenticatable
 {
@@ -58,5 +59,11 @@ class User extends Authenticatable
     }
     public function comments(){
       return $this->hasMany(Comment::class);
+    }
+    public function sendFriendRequestTo($recipient){
+      return  Friendship::firstOrCreate([
+        'sender_id' => $this->id,
+        'recipient_id' => $recipient->id,
+      ]);
     }
 }

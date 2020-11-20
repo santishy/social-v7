@@ -1,6 +1,8 @@
 <?php
 
 namespace Tests\Unit;
+
+use App\Models\Friendship;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
@@ -54,5 +56,24 @@ class UserTest extends TestCase
         Status::class,
         $user->statuses()->first()
       );
+    }
+
+    /** @test */
+    public function a_user_see_friend_requests(){
+      $sender = factory(User::class)->create();
+      $recipient = factory(User::class)->create();
+      $friendship = $sender->sendFriendRequestTo($recipient);
+      $this->assertInstanceOf(Friendship::class,$sender->sendFriendRequestTo($recipient));
+
+      $this->assertTrue($friendship->sender->is($sender));
+      $this->assertTrue($friendship->recipient->is($recipient));
+    }
+
+    /** @test */
+    public function a_user_can_accept_friend_request(){
+      $sender = factory(User::class)->create();
+      $recipient = factory(User::class)->create();
+      $sender->sendFriendRequestTo($recipient); //se crea la amistad
+      
     }
 }

@@ -10,6 +10,7 @@ use App\Models\Status;
 use App\Notifications\NewLikeNotification;
 use App\User;
 use Illuminate\Console\Scheduling\Event;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
 
@@ -35,6 +36,7 @@ class SendNewLikeNotificationTest extends TestCase
         FacadesNotification::assertSentTo($statusOwner, NewLikeNotification::class, function ($notification,$channels) use($likeSender,$status) {
             $this->assertContains('database',$channels);
             $this->assertContains('broadcast',$channels);
+            $this->assertInstanceOf(BroadcastMessage::class,$notification->toBroadcast($status->user));
             $this->assertTrue($notification->likeSender->is($likeSender));
             $this->assertTrue($notification->model->is($status));
             return true;

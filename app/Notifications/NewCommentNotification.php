@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -29,7 +30,7 @@ class NewCommentNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -61,7 +62,12 @@ class NewCommentNotification extends Notification
 
     public function toDatabase($notifiable){
         return [
-
+            'message' => "{$this->comment->user->name} comento tu publicación.",
+            'link' => $this->comment->path()
         ];
+    }
+
+    public function toBroadcast($notifiable){
+        return new BroadcastMessage($this->toDatabase($notifiable));
     }
 }

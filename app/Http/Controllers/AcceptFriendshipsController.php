@@ -13,6 +13,8 @@ class AcceptFriendshipsController extends Controller
       return view('friendships.index',compact('friendshipsRequest'));
     }
     public function store(User $sender){
+
+      request()->user()->acceptFriendRequestFrom($sender);
       Friendship::where([
         'sender_id' => $sender->id,
         'recipient_id' => auth()->id(),
