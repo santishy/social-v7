@@ -74,6 +74,15 @@ class UserTest extends TestCase
       $sender = factory(User::class)->create();
       $recipient = factory(User::class)->create();
       $sender->sendFriendRequestTo($recipient); //se crea la amistad
-      
+      $friendship = $recipient->acceptFriendRequestFrom($sender);
+      $this->assertEquals('accepted',$friendship->status);
     }
+      /** @test */
+      public function a_user_can_deny_friend_request(){
+        $sender = factory(User::class)->create();
+        $recipient = factory(User::class)->create();
+        $sender->sendFriendRequestTo($recipient); //se crea la amistad
+        $friendship = $recipient->denyFriendRequestFrom($sender);
+        $this->assertEquals('denied',$friendship->status);
+      }
 }

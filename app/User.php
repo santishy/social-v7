@@ -66,4 +66,20 @@ class User extends Authenticatable
         'recipient_id' => $recipient->id,
       ]);
     }
+    public function acceptFriendRequestFrom($sender){
+      $friendship = Friendship::where([
+        'sender_id' => $sender->id,
+        'recipient_id' => $this->id,
+      ])->first();//devuele una coleccion por eso se llama a first()
+      $friendship->update(['status' => 'accepted']);
+      return $friendship;
+    }
+    public function denyFriendRequestFrom($sender){
+      $friendship = Friendship::where([
+        'sender_id' => $sender->id,
+        'recipient_id' => $this->id,
+      ])->first();//devuele una coleccion por eso se llama a first()
+      $friendship->update(['status' => 'denied']);
+      return $friendship;
+    }
 }

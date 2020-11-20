@@ -15,17 +15,12 @@ class AcceptFriendshipsController extends Controller
     public function store(User $sender){
 
       request()->user()->acceptFriendRequestFrom($sender);
-      Friendship::where([
-        'sender_id' => $sender->id,
-        'recipient_id' => auth()->id(),
-      ])->update(['status' => 'accepted']);
+      
       return response()->json(['friendship_status' => 'accepted']);
     }
     public function destroy(User $sender){
-      Friendship::where([
-        'sender_id' => $sender->id,
-        'recipient_id' => auth()->id(),
-      ])->update(['status' => 'denied']);
+
+      request()->user()->denyFriendRequestFrom($sender);
       return response()->json(['friendship_status' => 'denied']);
     }
 }
