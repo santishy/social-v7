@@ -20,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\ModelLiked' => [
             'App\Listeners\SendNewLikeNotification'
+        ],
+        'App\Events\CommentCreated' => [
+            'App\Listeners\SendNewCommentNotification'
         ]
     ];
 

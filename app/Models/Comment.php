@@ -20,5 +20,8 @@ class Comment extends Model
       return route('statuses.show',$this->status_id)."#comment-{$this->id}";
     }
 
+    public function status(){
+      return $this->belongsTo(Status::class);
+    }
 
 }

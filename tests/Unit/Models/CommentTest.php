@@ -43,4 +43,10 @@ class CommentTest extends TestCase
     ]);
     $this->assertEquals(route('statuses.show', $status->id)."#comment-{$comment->id}",$comment->path());
   }
+
+  /** @test */
+  public function a_comment_belongs_to_status(){
+    $comment = factory(Comment::class)->create();
+    $this->assertInstanceOf(Status::class,$comment->status);
+  }
 }
