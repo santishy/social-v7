@@ -223,4 +223,16 @@ class CanRequestFriendshipsTest extends TestCase
       'sender_id' => $sender->id,
     ]);
   }
+
+  /** @test */
+  public function can_get_all_friendshp_request_received(){
+      $recipient = factory(User::class)->create();
+      $friendship = factory(Friendship::class)->create(['recipient_id' => $recipient->id]);
+      factory(Friendship::class,2)->create();
+      $this->actingAs($recipient);
+      $response = $this->get('/friendships/request');
+     
+      $this->assertCount(1,$response->viewData('friendshipsRequest'));
+
+  }
 }

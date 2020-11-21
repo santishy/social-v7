@@ -82,4 +82,8 @@ class User extends Authenticatable
       $friendship->update(['status' => 'denied']);
       return $friendship;
     }
+    public function friendshipRequestsReceived(){
+      return $this->hasMany(Friendship::class,'recipient_id');
+     // return Friendship::with('sender')->where(['recipient_id' => auth()->id()])->get();
+    }
 }

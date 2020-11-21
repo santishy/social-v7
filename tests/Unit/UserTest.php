@@ -85,4 +85,12 @@ class UserTest extends TestCase
         $friendship = $recipient->denyFriendRequestFrom($sender);
         $this->assertEquals('denied',$friendship->status);
       }
+      /** @test */  
+      public function a_user_can_get_all_their_friendship_requests(){
+        $recipient = factory(User::class)->create();
+        factory(Friendship::class)->create(['recipient_id' => $recipient->id]);
+        $this->actingAs($recipient);
+        $this->assertInstanceOf(Friendship::class,$recipient->friendshipRequestsReceived->first());
+      // TAREA HACER LO OPUESTO 
+      }
 }

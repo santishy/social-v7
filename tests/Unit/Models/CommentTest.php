@@ -49,4 +49,6 @@ class CommentTest extends TestCase
     $comment = factory(Comment::class)->create();
     $this->assertInstanceOf(Status::class,$comment->status);
   }
+
+  
 }
