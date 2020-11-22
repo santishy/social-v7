@@ -87,10 +87,26 @@ class UserTest extends TestCase
       }
       /** @test */  
       public function a_user_can_get_all_their_friendship_requests(){
+        $sender = factory(User::class)->create();
         $recipient = factory(User::class)->create();
-        factory(Friendship::class)->create(['recipient_id' => $recipient->id]);
+        $sender->sendFriendRequestTo($recipient); //se crea la amistad
         $this->actingAs($recipient);
+        $this->assertCount(1,$recipient->friendshipRequestsReceived);
+        $this->assertCount(0,$recipient->friendshipRequestsSent); // a enviado cero
         $this->assertInstanceOf(Friendship::class,$recipient->friendshipRequestsReceived->first());
-      // TAREA HACER LO OPUESTO 
+        $this->assertCount(1,$sender->friendshipRequestsSent);
+        $this->assertInstanceOf(Friendship::class,$sender->friendshipRequestsSent->first());
+      }
+
+      /** @test */
+      public function a_user_can_get_their_friends(){
+        $sender = factory(User::class)->create();
+        $recipient = factory(User::class)->create();
+        $sender->sendFriendRequestTo($recipient);
+        $this->assertCount(0,$sender->friends());
+        $this->assertCount(0,$recipient->friends());
+        $recipient->acceptFriendRequestFrom($sender);
+        $this->assertCount(1,$sender->friends());
+        $this->assertCount(1,$recipient->friends());
       }
 }
