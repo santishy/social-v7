@@ -41,6 +41,7 @@ class UsersCanCreateStatusesTest extends DuskTestCase
                     ->visit('/');
             $browser2->loginAs($user2)
                     ->visit('/')
+                    ->pause(500)
                     ->type('body','Mi primer status')
                     ->press('#create-status')
                     ->waitForText('Mi primer status')

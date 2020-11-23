@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class FriendshipsController extends Controller
 {
+
+  public function show(Request $request,User $recipient){
+    $friendship = Friendship::betweenUsers($request->user(),$recipient);
+    return response()->json([
+      'friendship_status' => $friendship->first()->status
+    ]);
+  }
   public function store(User $recipient)
   {
     if(auth()->id() === $recipient->id)

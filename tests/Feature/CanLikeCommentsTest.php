@@ -31,13 +31,19 @@ class CanLikeCommentsTest extends TestCase
     $user = factory(User::class)->create();
     $comment = factory(Comment::class)->create();
     $this->assertCount(0, $comment->likes);
-    $this->actingAs($user)->postJson(route('comments.likes.store', $comment));
+    $response = $this->actingAs($user)->postJson(route('comments.likes.store', $comment));
+    $response->assertJsonFragment([
+      'likes_count' => 1
+    ]);
     $this->assertCount(1, $comment->fresh()->likes);
     $this->assertDatabaseHas('likes', [
       'user_id' => $user->id,
       //'status_id' => $status->id
     ]);
-    $this->actingAs($user)->deleteJson(route('comments.likes.destroy', $comment));
+    $response = $this->actingAs($user)->deleteJson(route('comments.likes.destroy', $comment));
+    $response->assertJsonFragment([
+      'likes_count' => 0
+    ]);
     $this->assertCount(0, $comment->fresh()->likes);
     $this->assertDatabaseMissing('likes', [
       'user_id' => $user->id,

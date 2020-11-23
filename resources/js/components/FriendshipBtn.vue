@@ -27,6 +27,7 @@ export default {
         };
     },
     methods: {
+        
         toggleFriendshipStatus() {
             this.redirectIfGuest();
             let method = this.getMethod;
