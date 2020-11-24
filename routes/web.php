@@ -39,10 +39,6 @@ Route::get('/users/{user}/statuses','UsersStatusesController@index')->name('user
 //friends 
 Route::get('/friends','FriendsController@index')->name('friends.index')->middleware('auth');
 
-//friendships
-Route::get('/friendships/recipient','FriendshipsController@show')->name('friendships.show');
-Route::post('/friendships/{recipient}','FriendshipsController@store')->name('friendships.store')->middleware('auth');
-Route::delete('/friendships/{user}','FriendshipsController@destroy')->name('friendships.destroy')->middleware('auth');
 
 //Request Friendships
 Route::post('/accept-friendships/{sender}','AcceptFriendshipsController@store')->name('accept-friendships.store')->middleware('auth');
@@ -51,6 +47,11 @@ Route::get('/friendships/request','AcceptFriendshipsController@index')->name('ac
 Route::get('/', function () {
     return view('welcome');
 });
+//friendships
+Route::get('/friendships/{recipient}','FriendshipsController@show')->name('friendships.show')->middleware('auth');
+Route::post('/friendships/{recipient}','FriendshipsController@store')->name('friendships.store')->middleware('auth');
+Route::delete('/friendships/{user}','FriendshipsController@destroy')->name('friendships.destroy')->middleware('auth');
+
 
 //notifications
 Route::get('notifications','NotificationsController@index')->name('notifications.index')->middleware('auth');

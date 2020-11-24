@@ -79,7 +79,7 @@ class UsersCanManageTheirNotificationsTest extends DuskTestCase
 
                     $browser2->loginAs($user2)
                         ->visit('/')
-                        
+                        ->maximize()
                         ->waitFor('@comment-btn')
                         ->type('comment','Mi comentario')
                         ->press('@comment-btn');

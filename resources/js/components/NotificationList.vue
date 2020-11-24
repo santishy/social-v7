@@ -20,8 +20,8 @@
             aria-labelledby="dropdownNotifications"
         >
             <div class="dropdown-header text-center">
-                <slot></slot>
-                <span dusk="notifications-count">{{ count }}</span>
+                <!-- <slot></slot>
+                <span dusk="notifications-count">{{ count }}</span> -->
             </div>
             <notification-list-item
                 v-for="notification in notifications"
